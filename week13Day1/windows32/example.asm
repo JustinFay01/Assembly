@@ -37,12 +37,32 @@ _MainProc PROC
         input   prompt1, temp, 40
         atod    temp            ; convert the string starting in "temp" to integer in EAX
         mov     fahren, eax
+        jmp     freezeLbl
 
-
-        output  freeze, freeze ; output 
-
-        ; Done! Return
+        
+        
+freezeLbl:  ; if temp is       temp < 32
+        output  freeze, freeze
         mov     eax, 0  ; exit with return code 0
         ret
-_MainProc ENDP
+
+coldLbl:    ; if temp is 32 <= temp < 45
+        output  cold, cold
+        mov     eax, 0  ; exit with return code 0
+        ret
+coolLbl:    ; if temp is 45 <= temp < 60
+        output  cool, cool
+        mov     eax, 0  ; exit with return code 0
+        ret
+warmLbl:    ; if temp is 60 <= temp < 75
+        output  warm, warm
+        mov     eax, 0  ; exit with return code 0
+        ret
+hotLbl:     ; if temp is       75 <= temp
+        output  hot, hot
+        mov     eax, 0  ; exit with return code 0
+        ret
+
+       
+_MainProc ENDP  
 END                             ; end of source code
