@@ -37,7 +37,16 @@ _MainProc PROC
         input   prompt1, temp, 40
         atod    temp            ; convert the string starting in "temp" to integer in EAX
         mov     fahren, eax
-        jmp     freezeLbl
+        cmp     EAX, 32
+        JL      freezeLbl ; check if freezing
+        cmp     EAX, 45
+        JL      coldLbl
+        cmp     EAX, 60
+        JL      coolLbl
+        cmp     EAX, 75
+        JL      warmLbl
+        jmp     hotLBL
+        ret
 
         
         

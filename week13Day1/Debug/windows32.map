@@ -1,6 +1,6 @@
  windows32
 
- Timestamp is 642e3f28 (Wed Apr  5 23:40:24 2023)
+ Timestamp is 642e40df (Wed Apr  5 23:47:43 2023)
 
  Preferred load address is 00400000
 
@@ -182,7 +182,6 @@
  0002:00003320       ___castguard_slow_path_check_os_handled 00414320 f i MSVCRTD:guard_support.obj
  0002:000033c0       __guard_icall_checks_enforced 004143c0 f i MSVCRTD:guard_support.obj
  0002:000039a0       ?_RTC_GetSrcLine@@YAHPAEPA_WKPAH1K@Z 004149a0 f   MSVCRTD:pdblkup.obj
- 0002:00003d20       _MainProc                  00414d20 f   example.obj
  0002:00003e00       @__security_check_cookie@4 00414e00 f   MSVCRTD:secchk.obj
  0002:00003e20       __except_handler4_noexcept 00414e20 f   MSVCRTD:chandler4_noexcept.obj
  0002:00003ea0       ___isa_available_init      00414ea0 f   MSVCRTD:cpu_disp.obj
@@ -271,6 +270,7 @@
  0002:000044b0       __is_c_termination_complete 004154b0 f   MSVCRTD:ucrt_stubs.obj
  0002:000044c0       __filter_x86_sse2_floating_point_exception 004154c0 f   MSVCRTD:x86_exception_filter.obj
  0002:000044c0       __filter_x86_sse2_floating_point_exception_default 004154c0 f   MSVCRTD:x86_exception_filter.obj
+ 0002:00004600       _MainProc                  00415600 f   example.obj
  0003:00000000       ___xc_a                    00417000     MSVCRTD:initializers.obj
  0003:00000208       ___xc_z                    00417208     MSVCRTD:initializers.obj
  0003:0000030c       ___xi_a                    0041730c     MSVCRTD:initializers.obj
@@ -543,7 +543,7 @@
  0002:00003400       ?GetPdbDll@@YAPAUHINSTANCE__@@XZ 00414400 f   MSVCRTD:pdblkup.obj
  0002:000035a0       ?GetPdbDllFromInstallPath@@YAPAUHINSTANCE__@@XZ 004145a0 f   MSVCRTD:pdblkup.obj
  0002:00003890       ?GetPdbDllPathFromFilePath@@YAHPB_WPA_WI@Z 00414890 f   MSVCRTD:pdblkup.obj
- 0002:00003d20       $$000000                   00414d20     example.obj
+ 0002:00004600       $$000000                   00415600     example.obj
  0003:00000104       ?pre_cpp_initializer@@3P6AXXZA 00417104     MSVCRTD:exe_winmain.obj
  0003:00000410       ?pre_c_initializer@@3P6AHXZA 00417410     MSVCRTD:exe_winmain.obj
  0003:00000514       ?post_pgo_initializer@@3P6AHXZA 00417514     MSVCRTD:exe_winmain.obj

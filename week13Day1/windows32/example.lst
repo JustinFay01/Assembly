@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/05/23 23:41:13
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/05/23 23:48:14
 example.asm						     Page 1 - 1
 
 
@@ -71,36 +71,45 @@ example.asm						     Page 1 - 1
 				        input   prompt1, temp, 40
 				        atod    temp            ; convert the string starting in "temp" to integer in EAX
  0000002D  A3 00000000 R	        mov     fahren, eax
- 00000032  EB 00		        jmp     freezeLbl
+ 00000032  83 F8 20		        cmp     EAX, 32
+ 00000035  7C 12		        JL      freezeLbl ; check if freezing
+ 00000037  83 F8 2D		        cmp     EAX, 45
+ 0000003A  7C 2C		        JL      coldLbl
+ 0000003C  83 F8 3C		        cmp     EAX, 60
+ 0000003F  7C 46		        JL      coolLbl
+ 00000041  83 F8 4B		        cmp     EAX, 75
+ 00000044  7C 60		        JL      warmLbl
+ 00000046  EB 7D		        jmp     hotLBL
+ 00000048  C3			        ret
 
 				        
 				        
- 00000034			freezeLbl:  ; if temp is       temp < 32
+ 00000049			freezeLbl:  ; if temp is       temp < 32
 				        output  freeze, freeze
- 0000004D  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 00000052  C3			        ret
+ 00000062  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 00000067  C3			        ret
 
- 00000053			coldLbl:    ; if temp is 32 <= temp < 45
+ 00000068			coldLbl:    ; if temp is 32 <= temp < 45
 				        output  cold, cold
- 0000006C  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 00000071  C3			        ret
- 00000072			coolLbl:    ; if temp is 45 <= temp < 60
+ 00000081  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 00000086  C3			        ret
+ 00000087			coolLbl:    ; if temp is 45 <= temp < 60
 				        output  cool, cool
- 0000008B  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 00000090  C3			        ret
- 00000091			warmLbl:    ; if temp is 60 <= temp < 75
+ 000000A0  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 000000A5  C3			        ret
+ 000000A6			warmLbl:    ; if temp is 60 <= temp < 75
 				        output  warm, warm
- 000000AA  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 000000AF  C3			        ret
- 000000B0			hotLbl:     ; if temp is       75 <= temp
+ 000000BF  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 000000C4  C3			        ret
+ 000000C5			hotLbl:     ; if temp is       75 <= temp
 				        output  hot, hot
- 000000C9  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 000000CE  C3			        ret
+ 000000DE  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 000000E3  C3			        ret
 
 				       
- 000000CF			_MainProc ENDP  
+ 000000E4			_MainProc ENDP  
 				END                             ; end of source code
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/05/23 23:41:13
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/05/23 23:48:14
 example.asm						     Symbols 2 - 1
 
 
@@ -125,19 +134,19 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 000000C8 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000CF Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000E4 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
 
                 N a m e                 Type     Value    Attr
 
-_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000CF Public
-  freezeLbl  . . . . . . . . . .	L Near	 00000034 _TEXT	
-  coldLbl  . . . . . . . . . . .	L Near	 00000053 _TEXT	
-  coolLbl  . . . . . . . . . . .	L Near	 00000072 _TEXT	
-  warmLbl  . . . . . . . . . . .	L Near	 00000091 _TEXT	
-  hotLbl . . . . . . . . . . . .	L Near	 000000B0 _TEXT	
+_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000E4 Public
+  freezeLbl  . . . . . . . . . .	L Near	 00000049 _TEXT	
+  coldLbl  . . . . . . . . . . .	L Near	 00000068 _TEXT	
+  coolLbl  . . . . . . . . . . .	L Near	 00000087 _TEXT	
+  warmLbl  . . . . . . . . . . .	L Near	 000000A6 _TEXT	
+  hotLbl . . . . . . . . . . . .	L Near	 000000C5 _TEXT	
 
 
 Symbols:
