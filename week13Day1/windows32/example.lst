@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/05/23 23:48:14
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/05/23 23:59:03
 example.asm						     Page 1 - 1
 
 
@@ -33,33 +33,60 @@ example.asm						     Page 1 - 1
 	   65 20 69 6E 20
 	   46 61 72 65 6E
 	   68 65 69 74 00
- 00000033  00000028 [		temp    BYTE    40 DUP (?)
+ 00000033 45 6E 74 65 72	prompt2 BYTE    "Enter tomorrows temperature in Farenheit", 0
+	   20 74 6F 6D 6F
+	   72 72 6F 77 73
+	   20 74 65 6D 70
+	   65 72 61 74 75
+	   72 65 20 69 6E
+	   20 46 61 72 65
+	   6E 68 65 69 74
+	   00
+ 0000005C  00000028 [		temp2   BYTE    40 DUP (?)
 	    00
 	   ]
- 0000005B  0000000B [		celstr  BYTE    11 DUP (?), 0
+ 00000084  00000028 [		temp    BYTE    40 DUP (?)
+	    00
+	   ]
+ 000000AC  0000000B [		celstr  BYTE    11 DUP (?), 0
 	    00
 	   ] 00
- 00000067 49 74 27 73 20	freeze  BYTE    "It's Freezing!" ,0            ; if temp is       temp < 32
+ 000000B8 49 74 27 73 20	freeze  BYTE    "It's Freezing!" ,0            ; if temp is       temp < 32
 	   46 72 65 65 7A
 	   69 6E 67 21 00
- 00000076 49 74 27 73 20	cold    BYTE    "It's cold. Wear a coat!" ,0   ; if temp is 32 <= temp < 45
+ 000000C7 49 74 27 73 20	cold    BYTE    "It's cold. Wear a coat!" ,0   ; if temp is 32 <= temp < 45
 	   63 6F 6C 64 2E
 	   20 57 65 61 72
 	   20 61 20 63 6F
 	   61 74 21 00
- 0000008E 49 74 27 73 20	cool    BYTE    "It's cool out." ,0            ; if temp is 45 <= temp < 60
+ 000000DF 49 74 27 73 20	cool    BYTE    "It's cool out." ,0            ; if temp is 45 <= temp < 60
 	   63 6F 6F 6C 20
 	   6F 75 74 2E 00
- 0000009D 54 68 69 73 20	warm    BYTE    "This is the best weather!" ,0 ; if temp is 60 <= temp < 75
+ 000000EE 54 68 69 73 20	warm    BYTE    "This is the best weather!" ,0 ; if temp is 60 <= temp < 75
 	   69 73 20 74 68
 	   65 20 62 65 73
 	   74 20 77 65 61
 	   74 68 65 72 21
 	   00
- 000000B7 49 74 27 73 20	hot     BYTE    "It's summertime!"  ,0         ; if temp is       75 <= temp
+ 00000108 49 74 27 73 20	hot     BYTE    "It's summertime!"  ,0         ; if temp is       75 <= temp
 	   73 75 6D 6D 65
 	   72 74 69 6D 65
 	   21 00
+
+ 00000119 54 6F 6D 6F 72	hotTom  BYTE    "Tomorrow is warmer out than today.", 0
+	   72 6F 77 20 69
+	   73 20 77 61 72
+	   6D 65 72 20 6F
+	   75 74 20 74 68
+	   61 6E 20 74 6F
+	   64 61 79 2E 00
+ 0000013C 54 6F 6D 6F 72	coolTom  BYTE   "Tomorrow is cooler out than today.", 0
+	   72 6F 77 20 69
+	   73 20 63 6F 6F
+	   6C 65 72 20 6F
+	   75 74 20 74 68
+	   61 6E 20 74 6F
+	   64 61 79 2E 00
 
 				;--------------------------------------------------------------------------------------------
 				; Here's the actual code.
@@ -71,45 +98,61 @@ example.asm						     Page 1 - 1
 				        input   prompt1, temp, 40
 				        atod    temp            ; convert the string starting in "temp" to integer in EAX
  0000002D  A3 00000000 R	        mov     fahren, eax
+
  00000032  83 F8 20		        cmp     EAX, 32
- 00000035  7C 12		        JL      freezeLbl ; check if freezing
- 00000037  83 F8 2D		        cmp     EAX, 45
- 0000003A  7C 2C		        JL      coldLbl
- 0000003C  83 F8 3C		        cmp     EAX, 60
- 0000003F  7C 46		        JL      coolLbl
- 00000041  83 F8 4B		        cmp     EAX, 75
- 00000044  7C 60		        JL      warmLbl
- 00000046  EB 7D		        jmp     hotLBL
- 00000048  C3			        ret
+ 00000035  0F 8C 0000009B	        JL      freezeLbl ; check if freezing
+ 0000003B  83 F8 2D		        cmp     EAX, 45
+ 0000003E  0F 8C 000000B0	        JL      coldLbl
+ 00000044  83 F8 3C		        cmp     EAX, 60
+ 00000047  0F 8C 000000C5	        JL      coolLbl
+ 0000004D  83 F8 4B		        cmp     EAX, 75
+ 00000050  0F 8C 000000DA	        JL      warmLbl
+ 00000056  E9 000000F3		        jmp     hotLBL
+
+				        ; now for temp comparison
+ 0000005B			backLbl: 
+				        input prompt2, temp2, 40
+				        atod  temp2 
+ 00000088  3B 05 00000000 R	        cmp   EAX, fahren
+ 0000008E  7C 27		        JL    coolTomLbl
+ 00000090  7F 06		        JG    hotTomLbl
+				        
+
+ 00000092  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 00000097  C3			        ret
 
 				        
-				        
- 00000049			freezeLbl:  ; if temp is       temp < 32
+ 00000098			hotTomLbl:
+				        output hotTom, hotTom
+ 000000B1  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 000000B6  C3			        ret
+
+ 000000B7			coolTomLbl:
+				        output coolTom, coolTom
+ 000000D0  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 000000D5  C3			        ret
+				    
+ 000000D6			freezeLbl:  ; if temp is       temp < 32
 				        output  freeze, freeze
- 00000062  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 00000067  C3			        ret
+ 000000EF  E9 FFFFFF67		        jmp     backLbl
 
- 00000068			coldLbl:    ; if temp is 32 <= temp < 45
+ 000000F4			coldLbl:    ; if temp is 32 <= temp < 45
 				        output  cold, cold
- 00000081  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 00000086  C3			        ret
- 00000087			coolLbl:    ; if temp is 45 <= temp < 60
+ 0000010D  E9 FFFFFF49		         jmp     backLbl
+ 00000112			coolLbl:    ; if temp is 45 <= temp < 60
 				        output  cool, cool
- 000000A0  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 000000A5  C3			        ret
- 000000A6			warmLbl:    ; if temp is 60 <= temp < 75
+ 0000012B  E9 FFFFFF2B		         jmp     backLbl
+ 00000130			warmLbl:    ; if temp is 60 <= temp < 75
 				        output  warm, warm
- 000000BF  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 000000C4  C3			        ret
- 000000C5			hotLbl:     ; if temp is       75 <= temp
+ 00000149  E9 FFFFFF0D		         jmp     backLbl
+ 0000014E			hotLbl:     ; if temp is       75 <= temp
 				        output  hot, hot
- 000000DE  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 000000E3  C3			        ret
+ 00000167  E9 FFFFFEEF		        jmp     backLbl
 
 				       
- 000000E4			_MainProc ENDP  
+ 0000016C			_MainProc ENDP  
 				END                             ; end of source code
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/05/23 23:48:14
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/05/23 23:59:03
 example.asm						     Symbols 2 - 1
 
 
@@ -133,20 +176,23 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 000000C8 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000E4 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000015F Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000016C Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
 
                 N a m e                 Type     Value    Attr
 
-_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000E4 Public
-  freezeLbl  . . . . . . . . . .	L Near	 00000049 _TEXT	
-  coldLbl  . . . . . . . . . . .	L Near	 00000068 _TEXT	
-  coolLbl  . . . . . . . . . . .	L Near	 00000087 _TEXT	
-  warmLbl  . . . . . . . . . . .	L Near	 000000A6 _TEXT	
-  hotLbl . . . . . . . . . . . .	L Near	 000000C5 _TEXT	
+_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000016C Public
+  backLbl  . . . . . . . . . . .	L Near	 0000005B _TEXT	
+  hotTomLbl  . . . . . . . . . .	L Near	 00000098 _TEXT	
+  coolTomLbl . . . . . . . . . .	L Near	 000000B7 _TEXT	
+  freezeLbl  . . . . . . . . . .	L Near	 000000D6 _TEXT	
+  coldLbl  . . . . . . . . . . .	L Near	 000000F4 _TEXT	
+  coolLbl  . . . . . . . . . . .	L Near	 00000112 _TEXT	
+  warmLbl  . . . . . . . . . . .	L Near	 00000130 _TEXT	
+  hotLbl . . . . . . . . . . . .	L Near	 0000014E _TEXT	
 
 
 Symbols:
@@ -167,18 +213,22 @@ _showOutput  . . . . . . . . . .	L Near	 00000000 FLAT	External
 atodproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
 atowproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
 celsius  . . . . . . . . . . . .	DWord	 00000004 _DATA	
-celstr . . . . . . . . . . . . .	Byte	 0000005B _DATA	
-cold . . . . . . . . . . . . . .	Byte	 00000076 _DATA	
-cool . . . . . . . . . . . . . .	Byte	 0000008E _DATA	
+celstr . . . . . . . . . . . . .	Byte	 000000AC _DATA	
+cold . . . . . . . . . . . . . .	Byte	 000000C7 _DATA	
+coolTom  . . . . . . . . . . . .	Byte	 0000013C _DATA	
+cool . . . . . . . . . . . . . .	Byte	 000000DF _DATA	
 dtoaproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
 fahren . . . . . . . . . . . . .	DWord	 00000000 _DATA	
-freeze . . . . . . . . . . . . .	Byte	 00000067 _DATA	
-hot  . . . . . . . . . . . . . .	Byte	 000000B7 _DATA	
+freeze . . . . . . . . . . . . .	Byte	 000000B8 _DATA	
+hotTom . . . . . . . . . . . . .	Byte	 00000119 _DATA	
+hot  . . . . . . . . . . . . . .	Byte	 00000108 _DATA	
 nine . . . . . . . . . . . . . .	DWord	 00000008 _DATA	
 prompt1  . . . . . . . . . . . .	Byte	 00000010 _DATA	
-temp . . . . . . . . . . . . . .	Byte	 00000033 _DATA	
+prompt2  . . . . . . . . . . . .	Byte	 00000033 _DATA	
+temp2  . . . . . . . . . . . . .	Byte	 0000005C _DATA	
+temp . . . . . . . . . . . . . .	Byte	 00000084 _DATA	
 ten  . . . . . . . . . . . . . .	DWord	 0000000C _DATA	
-warm . . . . . . . . . . . . . .	Byte	 0000009D _DATA	
+warm . . . . . . . . . . . . . .	Byte	 000000EE _DATA	
 wtoaproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
 
 	   0 Warnings
