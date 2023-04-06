@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/04/23 12:58:30
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/05/23 23:17:00
 example.asm						     Page 1 - 1
 
 
@@ -33,22 +33,33 @@ example.asm						     Page 1 - 1
 	   65 20 69 6E 20
 	   46 61 72 65 6E
 	   68 65 69 74 00
- 00000033 54 68 65 20 43	prompt2 BYTE    "The Celsius temperature is"
-	   65 6C 73 69 75
-	   73 20 74 65 6D
-	   70 65 72 61 74
-	   75 72 65 20 69
-	   73
- 0000004D 00			digit1  BYTE     0
- 0000004E 00			digit2  BYTE     0
- 0000004F 20 64 65 67 72	prompt3 BYTE     " degrees", 0
-	   65 65 73 00
- 00000058  00000028 [		temp    BYTE    40 DUP (?)
+ 00000033  00000028 [		temp    BYTE    40 DUP (?)
 	    00
 	   ]
- 00000080  0000000B [		celstr  BYTE    11 DUP (?), 0
+ 0000005B  0000000B [		celstr  BYTE    11 DUP (?), 0
 	    00
 	   ] 00
+ 00000067 49 74 27 73 20	freeze  BYTE    "It's Freezing!" ,0            ; if temp is       temp < 32
+	   46 72 65 65 7A
+	   69 6E 67 21 00
+ 00000076 49 74 27 73 20	cold    BYTE    "It's cold. Wear a coat!" ,0   ; if temp is 32 <= temp < 45
+	   63 6F 6C 64 2E
+	   20 57 65 61 72
+	   20 61 20 63 6F
+	   61 74 21 00
+ 0000008E 49 74 27 73 20	cool    BYTE    "It's cool out." ,0            ; if temp is 45 <= temp < 60
+	   63 6F 6F 6C 20
+	   6F 75 74 2E 00
+ 0000009D 54 68 69 73 20	warm    BYTE    "This is the best weather!" ,0 ; if temp is 60 <= temp < 75
+	   69 73 20 74 68
+	   65 20 62 65 73
+	   74 20 77 65 61
+	   74 68 65 72 21
+	   00
+ 000000B7 49 74 27 73 20	hot     BYTE    "It's summertime!"  ,0         ; if temp is       75 <= temp
+	   73 75 6D 6D 65
+	   72 74 69 6D 65
+	   21 00
 
 				;--------------------------------------------------------------------------------------------
 				; Here's the actual code.
@@ -61,39 +72,15 @@ example.asm						     Page 1 - 1
 				        atod    temp            ; convert the string starting in "temp" to integer in EAX
  0000002D  A3 00000000 R	        mov     fahren, eax
 
-				       ; Now convert the number in EAX to a string and output the data
-				        ; Here is the tens digit.
- 00000032  A1 00000000 R	        mov     eax, fahren
- 00000037  83 E8 20		        sub     eax, 32         
- 0000003A  6B C0 05		        imul    eax, 5
- 0000003D  99			        cdq                     ; set up for division
- 0000003E  F7 3D 00000008 R	        idiv    nine            ; use the memory containing constant in the instruction
- 00000044  A3 00000004 R	        mov     celsius, eax    ; store the result
 
-				        ; Here is the ones digit.  Note we use a "neg" instruction to subtract the tens
-				        ; digit from the converted temperature
- 00000049  99			        cdq
- 0000004A  F7 3D 0000000C R	        idiv    ten
- 00000050  83 C0 30		        add     eax, 48
- 00000053  A2 0000004D R	        mov     digit1, al
-
-
- 00000058  A1 00000004 R	        mov     eax, celsius
- 0000005D  99			        cdq
- 0000005E  F7 3D 0000000C R	        idiv    ten
- 00000064  F7 2D 0000000C R	        imul    ten
- 0000006A  F7 D8		        neg     eax
- 0000006C  03 05 00000004 R	        add     eax, celsius
- 00000072  83 C0 30		        add     eax, 48
- 00000075  A2 0000004E R	        mov     digit2, al 
-				        output  prompt2, prompt2 ; output 
+				        output  freeze, freeze ; output 
 
 				        ; Done! Return
- 00000093  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 00000098  C3			        ret
- 00000099			_MainProc ENDP
+ 0000004B  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 00000050  C3			        ret
+ 00000051			_MainProc ENDP
 				END                             ; end of source code
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/04/23 12:58:30
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/05/23 23:17:00
 example.asm						     Symbols 2 - 1
 
 
@@ -117,15 +104,15 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 0000008C Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000099 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 000000C8 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000051 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
 
                 N a m e                 Type     Value    Attr
 
-_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000099 Public
+_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000051 Public
 
 
 Symbols:
@@ -146,17 +133,18 @@ _showOutput  . . . . . . . . . .	L Near	 00000000 FLAT	External
 atodproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
 atowproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
 celsius  . . . . . . . . . . . .	DWord	 00000004 _DATA	
-celstr . . . . . . . . . . . . .	Byte	 00000080 _DATA	
-digit1 . . . . . . . . . . . . .	Byte	 0000004D _DATA	
-digit2 . . . . . . . . . . . . .	Byte	 0000004E _DATA	
+celstr . . . . . . . . . . . . .	Byte	 0000005B _DATA	
+cold . . . . . . . . . . . . . .	Byte	 00000076 _DATA	
+cool . . . . . . . . . . . . . .	Byte	 0000008E _DATA	
 dtoaproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
 fahren . . . . . . . . . . . . .	DWord	 00000000 _DATA	
+freeze . . . . . . . . . . . . .	Byte	 00000067 _DATA	
+hot  . . . . . . . . . . . . . .	Byte	 000000B7 _DATA	
 nine . . . . . . . . . . . . . .	DWord	 00000008 _DATA	
 prompt1  . . . . . . . . . . . .	Byte	 00000010 _DATA	
-prompt2  . . . . . . . . . . . .	Byte	 00000033 _DATA	
-prompt3  . . . . . . . . . . . .	Byte	 0000004F _DATA	
-temp . . . . . . . . . . . . . .	Byte	 00000058 _DATA	
+temp . . . . . . . . . . . . . .	Byte	 00000033 _DATA	
 ten  . . . . . . . . . . . . . .	DWord	 0000000C _DATA	
+warm . . . . . . . . . . . . . .	Byte	 0000009D _DATA	
 wtoaproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
 
 	   0 Warnings
