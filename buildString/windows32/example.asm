@@ -11,7 +11,7 @@ INCLUDE io.h            ; header file for input/output
 
 .DATA
 
-strbuff DWORD    100 DUP (?)
+strbuff BYTE   32 DUP (?)
 str1    BYTE    "Justin", 0
 str2    BYTE    " is ", 0
 str3    BYTE     "cool",0
@@ -22,6 +22,8 @@ sum     BYTE    11 DUP (?), 0
 
 .CODE
 _MainProc PROC
+        
+        lea edx, strbuff ; get address fpr start pf n
         lea ebx, str1   ; Get address of string one
         mov eax, [ebx]  ; Store
         jmp whileLbl    ; jmp to label 
@@ -43,13 +45,15 @@ doneLbl:
 
 
 whileLbl:  
-    cmp AL, 0       ; If AL register != 0 j
+    cmp al, 0       ; If AL register != 0 j
     je  doneLbl          
     
                     
-    mov strbuff, eax    ; store in buffer
+    mov [edx], al       ; store in buffer
+    inc edx
     inc ebx             ; increment address
     mov eax, [ebx]      ; grab next charcter of string
+    jmp whileLbl
 
                                     ; jmp to cx position
                     ; if cx == 1 

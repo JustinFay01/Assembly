@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/05/23 23:59:03
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/06/23 23:15:05
 example.asm						     Page 1 - 1
 
 
@@ -152,7 +152,7 @@ example.asm						     Page 1 - 1
 				       
  0000016C			_MainProc ENDP  
 				END                             ; end of source code
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/05/23 23:59:03
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/06/23 23:15:05
 example.asm						     Symbols 2 - 1
 
 

@@ -1,0 +1,148 @@
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/06/23 23:45:38
+example.asm						     Page 1 - 1
+
+
+				; Example assembly language program -- adds two numbers
+				; Author:  R. Detmer
+				; Date:    1/2008
+
+				.586
+				.MODEL FLAT
+
+				INCLUDE io.h            ; header file for input/output
+			      C ; IO.H -- header file for I/O macros (listing suppressed)
+			      C .NOLIST      ; turn off listing
+			      C .LIST        ; begin listing
+			      C 
+
+				.STACK 4096
+
+ 00000000			.DATA
+
+ 00000000  00000020 [		strbuff BYTE   32 DUP (?)
+	    00
+	   ]
+ 00000020 4A 75 73 74 69	str1    BYTE    "Justin", 0
+	   6E 00
+ 00000027 20 69 73 20 00	str2    BYTE    " is ", 0
+ 0000002C 63 6F 6F 6C 00	str3    BYTE     "cool",0
+
+
+ 00000031  00000028 [		string  BYTE    40 DUP (?)
+	    00
+	   ]
+ 00000059  0000000B [		sum     BYTE    11 DUP (?), 0
+	    00
+	   ] 00
+
+ 00000000			.CODE
+ 00000000			_MainProc PROC
+				        
+ 00000000  8D 15 00000000 R	        lea edx, strbuff ; get address fpr start pf n
+ 00000006  8D 1D 00000020 R	        lea ebx, str1   ; Get address of string one
+ 0000000C  8B 03		        mov eax, [ebx]  ; Store
+ 0000000E  EB 33		        jmp whileLbl    ; jmp to label 
+
+ 00000010			str2Lbl:
+ 00000010  8D 1D 00000027 R	        lea ebx, str2   ; Get address of string one
+ 00000016  8B 03		        mov eax, [ebx]  ; Store
+ 00000018  EB 29		        jmp whileLbl    ; jmp to label 
+
+ 0000001A			str3Lbl:
+ 0000001A  8D 1D 0000002C R	        lea ebx, str3   ; Get address of string one
+ 00000020  8B 03		        mov eax, [ebx]  ; Store
+ 00000022  EB 1F		        jmp whileLbl    ; jmp to label 
+ 00000024			doneLbl:
+				        output  strbuff, strbuff      ; output label and sum
+ 0000003D  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 00000042  C3			        ret
+
+
+
+ 00000043			whileLbl:  
+ 00000043  3C 00		    cmp al, 0       ; If AL register != 0 j
+ 00000045  74 DD		    je  doneLbl          
+				    
+				                    
+ 00000047  88 02		    mov [edx], al       ; store in buffer
+ 00000049  42			    inc edx
+ 0000004A  43			    inc ebx             ; increment address
+ 0000004B  8B 03		    mov eax, [ebx]      ; grab next charcter of string
+ 0000004D  EB F4		    jmp whileLbl
+
+				                                    ; jmp to cx position
+				                    ; if cx == 1 
+				                        ;jmp 1
+				                    ; if cx == 2
+				                        ; jmp 2
+				    
+ 0000004F			_MainProc ENDP
+				END                             ; end of source code
+
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/06/23 23:45:38
+example.asm						     Symbols 2 - 1
+
+
+
+
+Macros:
+
+                N a m e                 Type
+
+atod . . . . . . . . . . . . . .	Proc
+atow . . . . . . . . . . . . . .	Proc
+dtoa . . . . . . . . . . . . . .	Proc
+input  . . . . . . . . . . . . .	Proc
+output . . . . . . . . . . . . .	Proc
+wtoa . . . . . . . . . . . . . .	Proc
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000065 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000004F Para	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000004F Public
+  str2Lbl  . . . . . . . . . . .	L Near	 00000010 _TEXT	
+  str3Lbl  . . . . . . . . . . .	L Near	 0000001A _TEXT	
+  doneLbl  . . . . . . . . . . .	L Near	 00000024 _TEXT	
+  whileLbl . . . . . . . . . . .	L Near	 00000043 _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000000h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+_getInput  . . . . . . . . . . .	L Near	 00000000 FLAT	External
+_showOutput  . . . . . . . . . .	L Near	 00000000 FLAT	External
+atodproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+atowproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+dtoaproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+str1 . . . . . . . . . . . . . .	Byte	 00000020 _DATA	
+str2 . . . . . . . . . . . . . .	Byte	 00000027 _DATA	
+str3 . . . . . . . . . . . . . .	Byte	 0000002C _DATA	
+strbuff  . . . . . . . . . . . .	Byte	 00000000 _DATA	
+string . . . . . . . . . . . . .	Byte	 00000031 _DATA	
+sum  . . . . . . . . . . . . . .	Byte	 00000059 _DATA	
+wtoaproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+
+	   0 Warnings
+	   0 Errors
