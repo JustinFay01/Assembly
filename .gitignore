@@ -1,2 +1,7 @@
 *.opendb
 *.log
+*.vsidx
+*.db
+*.db-shm
+*.db-wal
+*.suo
