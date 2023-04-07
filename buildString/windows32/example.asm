@@ -10,31 +10,53 @@ INCLUDE io.h            ; header file for input/output
 .STACK 4096
 
 .DATA
-number1 DWORD   ?
-number2 DWORD   ?
-prompt1 BYTE    "Enter first number", 0
-prompt2 BYTE    "Enter second number", 0
+
+strbuff DWORD    100 DUP (?)
+str1    BYTE    "Justin", 0
+str2    BYTE    " is ", 0
+str3    BYTE     "cool",0
+
+
 string  BYTE    40 DUP (?)
-resultLbl BYTE  "The sum is", 0
 sum     BYTE    11 DUP (?), 0
 
 .CODE
 _MainProc PROC
-        input   prompt1, string, 40      ; read ASCII characters
-        atod    string          ; convert to integer
-        mov     number1, eax    ; store in memory
+        lea ebx, str1   ; Get address of string one
+        mov eax, [ebx]  ; Store
+        jmp whileLbl    ; jmp to label 
 
-        input   prompt2, string, 40      ; repeat for second number
-        atod    string
-        mov     number2, eax
-        
-        mov     eax, number1    ; first number to EAX
-        add     eax, number2    ; add second number
-        dtoa    sum, eax        ; convert to ASCII characters
-        output  resultLbl, sum          ; output label and sum
+str2Lbl:
+        lea ebx, str2   ; Get address of string one
+        mov eax, [ebx]  ; Store
+        jmp whileLbl    ; jmp to label 
 
+str3Lbl:
+        lea ebx, str3   ; Get address of string one
+        mov eax, [ebx]  ; Store
+        jmp whileLbl    ; jmp to label 
+doneLbl:
+        output  strbuff, strbuff      ; output label and sum
         mov     eax, 0  ; exit with return code 0
         ret
+
+
+
+whileLbl:  
+    cmp AL, 0       ; If AL register != 0 j
+    je  doneLbl          
+    
+                    
+    mov strbuff, eax    ; store in buffer
+    inc ebx             ; increment address
+    mov eax, [ebx]      ; grab next charcter of string
+
+                                    ; jmp to cx position
+                    ; if cx == 1 
+                        ;jmp 1
+                    ; if cx == 2
+                        ; jmp 2
+    
 _MainProc ENDP
 END                             ; end of source code
 
