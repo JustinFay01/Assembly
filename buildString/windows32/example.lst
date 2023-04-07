@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/06/23 23:45:38
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/06/23 23:51:02
 example.asm						     Page 1 - 1
 
 
@@ -38,48 +38,49 @@ example.asm						     Page 1 - 1
  00000000			.CODE
  00000000			_MainProc PROC
 				        
- 00000000  8D 15 00000000 R	        lea edx, strbuff ; get address fpr start pf n
+ 00000000  8D 15 00000000 R	        lea edx, strbuff ; get address for start of buffer
+
  00000006  8D 1D 00000020 R	        lea ebx, str1   ; Get address of string one
  0000000C  8B 03		        mov eax, [ebx]  ; Store
- 0000000E  EB 33		        jmp whileLbl    ; jmp to label 
+ 0000000E  EB 43		        jmp whileLbl    ; jmp to label 
 
  00000010			str2Lbl:
- 00000010  8D 1D 00000027 R	        lea ebx, str2   ; Get address of string one
+ 00000010  8D 1D 00000027 R	        lea ebx, str2   ; Get address of string two
  00000016  8B 03		        mov eax, [ebx]  ; Store
- 00000018  EB 29		        jmp whileLbl    ; jmp to label 
+ 00000018  EB 39		        jmp whileLbl    ; jmp to label 
 
  0000001A			str3Lbl:
- 0000001A  8D 1D 0000002C R	        lea ebx, str3   ; Get address of string one
+ 0000001A  8D 1D 0000002C R	        lea ebx, str3   ; Get address of string three
  00000020  8B 03		        mov eax, [ebx]  ; Store
- 00000022  EB 1F		        jmp whileLbl    ; jmp to label 
+ 00000022  EB 2F		        jmp whileLbl    ; jmp to label 
  00000024			doneLbl:
-				        output  strbuff, strbuff      ; output label and sum
+				        output  strbuff, strbuff      ; output buff
  0000003D  B8 00000000		        mov     eax, 0  ; exit with return code 0
  00000042  C3			        ret
 
+ 00000043			whatjmpLbl:
+ 00000043  66| 41		    inc cx         ;inc cx first time
+ 00000045  66| 83 F9 01		    cmp cx, 1      
+ 00000049  74 C5		    je  str2lbl    ; if cx is one jmp to label 2 (second value of array of three strings)
+ 0000004B  66| 83 F9 02		    cmp cx, 2
+ 0000004F  74 C9		    je  str3lbl     ; else if cx is two jmp to label 3
+ 00000051  EB D1		    jmp doneLbl     ; else output
 
-
- 00000043			whileLbl:  
- 00000043  3C 00		    cmp al, 0       ; If AL register != 0 j
- 00000045  74 DD		    je  doneLbl          
+ 00000053			whileLbl:  
+ 00000053  3C 00		    cmp al, 0       ; If AL register != 0 j
+ 00000055  74 EC		    je  whatjmpLbl  ; check which lbl we need to jmp to      
 				    
 				                    
- 00000047  88 02		    mov [edx], al       ; store in buffer
- 00000049  42			    inc edx
- 0000004A  43			    inc ebx             ; increment address
- 0000004B  8B 03		    mov eax, [ebx]      ; grab next charcter of string
- 0000004D  EB F4		    jmp whileLbl
-
-				                                    ; jmp to cx position
-				                    ; if cx == 1 
-				                        ;jmp 1
-				                    ; if cx == 2
-				                        ; jmp 2
+ 00000057  88 02		    mov [edx], al       ; store in buffer
+ 00000059  42			    inc edx             ; inc where to write inside of the buffer
+ 0000005A  43			    inc ebx             ; increment address
+ 0000005B  8B 03		    mov eax, [ebx]      ; grab next charcter of string
+ 0000005D  EB F4		    jmp whileLbl
 				    
- 0000004F			_MainProc ENDP
+ 0000005F			_MainProc ENDP
 				END                             ; end of source code
 
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/06/23 23:45:38
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/06/23 23:51:02
 example.asm						     Symbols 2 - 1
 
 
@@ -104,18 +105,19 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 00000065 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000004F Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000005F Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
 
                 N a m e                 Type     Value    Attr
 
-_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000004F Public
+_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000005F Public
   str2Lbl  . . . . . . . . . . .	L Near	 00000010 _TEXT	
   str3Lbl  . . . . . . . . . . .	L Near	 0000001A _TEXT	
   doneLbl  . . . . . . . . . . .	L Near	 00000024 _TEXT	
-  whileLbl . . . . . . . . . . .	L Near	 00000043 _TEXT	
+  whatjmpLbl . . . . . . . . . .	L Near	 00000043 _TEXT	
+  whileLbl . . . . . . . . . . .	L Near	 00000053 _TEXT	
 
 
 Symbols:
