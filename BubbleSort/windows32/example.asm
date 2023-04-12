@@ -70,7 +70,7 @@ outputstring:
 
         lea     ebx, array          ; Grab first value of array
         mov     ecx, [ebx]          ; Load its value into eax
-        jecxz   display2            ; if itz zero just stop 
+        ;jecxz   display2            ; if itz zero just stop 
        
         mov     i, ebx              ; i becomes index
         mov     j, ebx              ; j becomes index as well
@@ -80,7 +80,7 @@ outputstring:
         mov     ecx, 0              ; reset ecx to 0 so we can coutn with it
         sub     n, 1                ; make it n -1
         cmp     n, 0                ; check if length of array is 0 
-        je      display2             ; if the length is 0 the array is sorted
+        ;je      display2             ; if the length is 0 the array is sorted
 
         jmp     forOne              ; jmp to outer for loop
 
