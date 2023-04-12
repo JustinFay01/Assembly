@@ -119,7 +119,8 @@ forTwo:
       cmp   edi, [eax+4]   ; if array[j] > array[j+1] jmp swap 
 
       add   j, 4                ; inc j (+4)
-      inc   ebx                 ; inc ebx   
+      inc   ebx      
+      inc ebx               ; inc ebx   
 
       jg    swapLbl             ; jg swap
       ; else

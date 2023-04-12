@@ -6,3 +6,9 @@
 *.db-wal
 *.suo
 *.obj
+*.exe
+*.ilk
+*.map
+*.pdb
+*.lst
+
