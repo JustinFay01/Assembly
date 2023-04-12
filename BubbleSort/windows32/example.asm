@@ -100,38 +100,38 @@ forOne:
       mov   j, ebx
       mov   ebx, 0 
 
-
-      mov   eax, 4              ; INCREMENT i 
-      add   i, eax 
+          
+      add   i, 4              ; INCREMENT i 
       inc    ecx
 
       jmp forTwo
 
     
-      
 forTwo:
       cmp   ebx, lim            ; EBX = counter for for loop 2
       jge    forOne
 
       mov   eax, j              ; current location in mem
       mov   edi, [eax]          ; EDI HOLDS [j] OF ARRAY 
-      cmp   edi, [eax+4]   ; if array[j] > array[j+1] jmp swap 
+      cmp   edi, [eax+4]        ; if array[j] > array[j+1] jmp swap 
 
+  
+      ;jg    swapLbl             ; jg swap
+
+      ; ELSE
       add   j, 4                ; inc j (+4)
       inc   ebx     
-   
-
-      ;jg    swapLbl             ; jg swap
-      ; else
       jmp forTwo                ; restart loop
 
 
 
 swapLbl:
-        mov temp, esi
-        mov esi, edi
-        mov edi, temp
-        jmp forTwo
+       
+
+        
+       add   j, 4                ; inc j (+4)
+       inc   ebx     
+       jmp forTwo                ; restart loop
 
 
 ;***  Print the new sorted list
