@@ -1,6 +1,6 @@
  windows32
 
- Timestamp is 6433886d (Sun Apr  9 23:54:21 2023)
+ Timestamp is 643432b8 (Mon Apr 10 12:00:56 2023)
 
  Preferred load address is 00400000
 
@@ -21,15 +21,15 @@
  0003:00000b30 00000c50H .rdata                  DATA
  0003:00001780 00000180H .rdata$CastGuardVftablesA DATA
  0003:00001900 0000014cH .rdata$CastGuardVftablesC DATA
- 0003:00001a4c 00000194H .rdata$zzzdbg           DATA
- 0003:00001be0 00000104H .rtc$IAA                DATA
- 0003:00001ce4 00000104H .rtc$IMZ                DATA
- 0003:00001de8 00000104H .rtc$IZZ                DATA
- 0003:00001eec 00000104H .rtc$TAA                DATA
- 0003:00001ff0 00000104H .rtc$TMZ                DATA
- 0003:000020f4 00000104H .rtc$TZZ                DATA
- 0003:000021f8 00000169H .xdata$x                DATA
- 0003:00002361 00000000H .edata                  DATA
+ 0003:00001a4c 0000018cH .rdata$zzzdbg           DATA
+ 0003:00001bd8 00000104H .rtc$IAA                DATA
+ 0003:00001cdc 00000104H .rtc$IMZ                DATA
+ 0003:00001de0 00000104H .rtc$IZZ                DATA
+ 0003:00001ee4 00000104H .rtc$TAA                DATA
+ 0003:00001fe8 00000104H .rtc$TMZ                DATA
+ 0003:000020ec 00000104H .rtc$TZZ                DATA
+ 0003:000021f0 00000169H .xdata$x                DATA
+ 0003:00002359 00000000H .edata                  DATA
  0004:00000000 000002a0H .data                   DATA
  0004:000002a0 000006c8H .bss                    DATA
  0005:00000000 00000200H .idata$5                DATA
@@ -323,10 +323,10 @@
  0003:00001510       __load_config_used         00418510     MSVCRTD:loadcfg.obj
  0003:00001780       ___CastGuardVftablesStart  00418780     MSVCRTD:guard_support.obj
  0003:00001900       ___CastGuardVftablesEnd    00418900     MSVCRTD:guard_support.obj
- 0003:00001be0       ___rtc_iaa                 00418be0     MSVCRTD:initsect.obj
- 0003:00001de8       ___rtc_izz                 00418de8     MSVCRTD:initsect.obj
- 0003:00001eec       ___rtc_taa                 00418eec     MSVCRTD:initsect.obj
- 0003:000020f4       ___rtc_tzz                 004190f4     MSVCRTD:initsect.obj
+ 0003:00001bd8       ___rtc_iaa                 00418bd8     MSVCRTD:initsect.obj
+ 0003:00001de0       ___rtc_izz                 00418de0     MSVCRTD:initsect.obj
+ 0003:00001ee4       ___rtc_taa                 00418ee4     MSVCRTD:initsect.obj
+ 0003:000020ec       ___rtc_tzz                 004190ec     MSVCRTD:initsect.obj
  0004:00000160       ___security_cookie         0041a160     MSVCRTD:gs_cookie.obj
  0004:00000164       ___security_cookie_complement 0041a164     MSVCRTD:gs_cookie.obj
  0004:0000016c       ?_RTC_ErrorLevels@@3PAHA   0041a16c     MSVCRTD:error.obj
@@ -559,11 +559,11 @@
  0003:00001328       ?debugCrtFileName@@3QB_WB  00418328     MSVCRTD:pdblkup.obj
  0003:000014b8       ?dllExt@?1??GetPdbDllPathFromFilePath@@YAHPB_WPA_WI@Z@4QB_WB 004184b8     MSVCRTD:pdblkup.obj
  0003:000014c4       ?mspdbFilename@?1??GetPdbDllPathFromFilePath@@YAHPB_WPA_WI@Z@4QB_WB 004184c4     MSVCRTD:pdblkup.obj
- 0003:00001ce4       __RTC_InitBase.rtc$IMZ     00418ce4     framework.obj
- 0003:00001ff0       __RTC_Shutdown.rtc$TMZ     00418ff0     framework.obj
- 0003:000021f8       __sehtable$?__scrt_common_main_seh@@YAHXZ 004191f8     MSVCRTD:exe_winmain.obj
- 0003:00002218       __sehtable$?notify_debugger@@YAXABUtagEXCEPTION_VISUALCPP_DEBUG_INFO@@@Z 00419218     MSVCRTD:error.obj
- 0003:00002238       __sehtable$___scrt_is_nonwritable_in_current_image 00419238     MSVCRTD:utility.obj
+ 0003:00001cdc       __RTC_InitBase.rtc$IMZ     00418cdc     framework.obj
+ 0003:00001fe8       __RTC_Shutdown.rtc$TMZ     00418fe8     framework.obj
+ 0003:000021f0       __sehtable$?__scrt_common_main_seh@@YAHXZ 004191f0     MSVCRTD:exe_winmain.obj
+ 0003:00002210       __sehtable$?notify_debugger@@YAXABUtagEXCEPTION_VISUALCPP_DEBUG_INFO@@@Z 00419210     MSVCRTD:error.obj
+ 0003:00002230       __sehtable$___scrt_is_nonwritable_in_current_image 00419230     MSVCRTD:utility.obj
  0004:00000000       strbuff                    0041a000     example.obj
  0004:00000020       inOne                      0041a020     example.obj
  0004:00000024       inTwo                      0041a024     example.obj

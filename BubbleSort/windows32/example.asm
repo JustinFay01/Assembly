@@ -20,6 +20,11 @@ prompt1 BYTE    "Unsorted List", 0
 prompt2 BYTE    "Sorted List", 0
 inlimit DWORD   ?
 
+n       DWORD   ?
+i       DWORD   0
+j       DWORD   0
+testStr DWORD   10 DUP (?), 0
+
 .CODE
 _MainProc PROC
 
@@ -59,7 +64,25 @@ outputstring:
 
 ;*** Now launch into the Bubble Sort
 
-;***************  ADD BUBBLE SORT CODE HERE
+;***************  ADD BUBBLE SORT CODE HERE ************************
+
+        lea     ebx, array          ; Grab first value of array
+        mov     ecx, [ebx]          ; Load its value into eax
+        jecxz   doneLbl             ; if itz zero just stop 
+            
+        mov n, LENGTHOF array
+        cmp     ecx, LENGTHOF array
+        mov     ecx, 0              ; reset ecx so we can store n
+        jmp     getLen              ; Other wise get len of the array 
+
+doneLbl:
+
+forOne:
+
+forTwo:
+
+SwapLbl:
+
 
 
 ;***  Print the new sorted list
