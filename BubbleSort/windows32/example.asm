@@ -24,7 +24,6 @@ n       DWORD   ?
 i       DWORD   0
 j       DWORD   0
 testStr DWORD   10 DUP (?), 0
-
 .CODE
 _MainProc PROC
 
@@ -69,16 +68,44 @@ outputstring:
         lea     ebx, array          ; Grab first value of array
         mov     ecx, [ebx]          ; Load its value into eax
         jecxz   doneLbl             ; if itz zero just stop 
-            
-        mov n, LENGTHOF array
-        cmp     ecx, LENGTHOF array
-        mov     ecx, 0              ; reset ecx so we can store n
-        jmp     getLen              ; Other wise get len of the array 
+       
+        mov     i, ebx              ; i becomes index
+
+
+        mov     n, LENGTHOF array
+        mov     ecx, 0              ; reset ecx to 0 so we can coutn with it
+        sub     n, 1                ; make it n -1
+        cmp     n, 0                ; check if length of array is 0 
+        je      doneLbl             ; if the length is 0 the array is sorted
+
+        jmp     forOne              ; jmp to outer for loop
 
 doneLbl:
+    ret
 
 forOne:
+      cmp   ecx, n  ; compare ecx and n (-1) 
+      je    doneLbl ; if equal done
 
+      ; print value of arr
+      mov   ebx, i 
+      mov   eax, [ebx]          ; EAX HOLDS [i] OF ARRAY 
+
+                                ; Set new j value
+
+
+     
+      mov   esi, 4              ; INCREMENT i 
+      add   i, esi 
+
+
+      
+      inc    ecx
+      jmp    forOne
+      ; else
+      
+    
+      ret
 forTwo:
 
 SwapLbl:

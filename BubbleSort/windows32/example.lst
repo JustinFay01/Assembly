@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/12/23 11:36:25
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/12/23 12:06:58
 example.asm						     Page 1 - 1
 
 
@@ -51,7 +51,6 @@ example.asm						     Page 1 - 1
  000000C6  0000000A [		testStr DWORD   10 DUP (?), 0
 	    00000000
 	   ] 00000000
-
  00000000			.CODE
  00000000			_MainProc PROC
 
@@ -95,87 +94,93 @@ example.asm						     Page 1 - 1
 
  0000005A  8D 1D 00000000 R	        lea     ebx, array          ; Grab first value of array
  00000060  8B 0B		        mov     ecx, [ebx]          ; Load its value into eax
- 00000062  E3 0A		        jecxz   doneLbl             ; if itz zero just stop 
-				            
- 00000064  83 F9 0A		        cmp     ecx, LENGTHOF array
- 00000067  B9 00000000		        mov     ecx, 0              ; reset ecx so we can store n
- 0000006C  EB 00		        jmp     getLen              ; Other wise get len of the array 
+ 00000062  E3 27		        jecxz   doneLbl             ; if itz zero just stop 
+				       
+ 00000064  89 1D 000000BE R	        mov     i, ebx              ; i becomes index
 
- 0000006E			doneLbl:
 
- 0000006E			getLen:
- 0000006E  C7 05 000000BA R	        mov n, LENGTHOF array
+ 0000006A  C7 05 000000BA R	        mov     n, LENGTHOF array
 	   0000000A
-				        dtoa    testStr, n
-				        output   testStr, testStr
+ 00000074  B9 00000000		        mov     ecx, 0              ; reset ecx to 0 so we can coutn with it
+ 00000079  83 2D 000000BA R	        sub     n, 1                ; make it n -1
+	   01
+ 00000080  83 3D 000000BA R	        cmp     n, 0                ; check if length of array is 0 
+	   00
+ 00000087  74 02		        je      doneLbl             ; if the length is 0 the array is sorted
 
-				        
-				        ;do While the value of the array does not equal zero inc n and keep going
- 000000AD  41			        inc     ecx             ; inc ecx to be our final length                       
- 000000AE  43			        inc     ebx             ; inc edx for next value of arr
- 000000AF  8B 03		        mov     eax, [ebx]      ; load next val into eax
-				        
- 000000B1  A3 000000BA R	        mov     n, eax
-				        dtoa    testStr, n
-				        output  testStr, testStr
-				        
- 000000EB  83 F8 00		        cmp     eax, 0
- 000000EE  0F 85 FFFFFF7A	        jnz     getLen          ; check if its zero, if not keep going, if so skip
+ 00000089  EB 01		        jmp     forOne              ; jmp to outer for loop
 
- 000000F4  89 0D 000000BA R	        mov     n, ecx         ; load n as len of array
-				        dtoa    testStr, n
-				        output  testStr, testStr
- 0000012F  C3			        ret
+ 0000008B			doneLbl:
+ 0000008B  C3			    ret
 
+ 0000008C			forOne:
+ 0000008C  3B 0D 000000BA R	      cmp   ecx, n  ; compare ecx and n (-1) 
+ 00000092  74 F7		      je    doneLbl ; if equal done
 
+				      ; print value of arr
+ 00000094  8B 1D 000000BE R	      mov   ebx, i 
+ 0000009A  8B 03		      mov   eax, [ebx]  
+				     
+ 0000009C  BE 00000004		      mov   esi, 4
+ 000000A1  01 35 000000BE R	      add   i, esi 
 
- 00000130			forOne:
+				      
+				      
+				      dtoa      testStr, eax
+				      output    testStr, testStr
 
- 00000130			forTwo:
+				      
+ 000000D8  41			      inc    ecx
+ 000000D9  EB B1		      jmp    forOne
+				      ; else
+				      
+				    
+ 000000DB  C3			      ret
+ 000000DC			forTwo:
 
- 00000130			SwapLbl:
+ 000000DC			SwapLbl:
 
 
 
 				;***  Print the new sorted list
 
- 00000130			display2:
+ 000000DC			display2:
 				        ; ECX holds the address of the string being built
- 00000130  8D 0D 0000002C R	        lea	   ecx, string
+ 000000DC  8D 0D 0000002C R	        lea	   ecx, string
 
 				        ; EBX will hold the address of the current item in the array
- 00000136  8D 1D 00000000 R	        lea    ebx, array
+ 000000E2  8D 1D 00000000 R	        lea    ebx, array
 
 				        ; Look for the 0 at the end of the list
- 0000013C  8B 03		out2:   mov    eax, [ebx]
- 0000013E  3C 00		        cmp    al, 0
- 00000140  74 2F		        je     outputstring2
+ 000000E8  8B 03		out2:   mov    eax, [ebx]
+ 000000EA  3C 00		        cmp    al, 0
+ 000000EC  74 2F		        je     outputstring2
 
 				        ; Convert the number to a series of characters
 				        dtoa   numstr, eax
 
 				        ; Copy the characters to the string being build
- 0000015A  8D 15 00000090 R	        lea    edx, numstr
- 00000160  8B 02		while2: mov     eax, [edx]
- 00000162  3C 00		        cmp     al, 0
- 00000164  75 05		        jne     movechar2
- 00000166  83 C3 04		        add     ebx,4
- 00000169  EB D1		        jmp     out2
- 0000016B			movechar2:
- 0000016B  89 01		        mov     [ecx], eax      ; Move the character
- 0000016D  42			        inc     edx             ; Increment counters
- 0000016E  41			        inc     ecx
- 0000016F  EB EF		        jmp     while2
+ 00000106  8D 15 00000090 R	        lea    edx, numstr
+ 0000010C  8B 02		while2: mov     eax, [edx]
+ 0000010E  3C 00		        cmp     al, 0
+ 00000110  75 05		        jne     movechar2
+ 00000112  83 C3 04		        add     ebx,4
+ 00000115  EB D1		        jmp     out2
+ 00000117			movechar2:
+ 00000117  89 01		        mov     [ecx], eax      ; Move the character
+ 00000119  42			        inc     edx             ; Increment counters
+ 0000011A  41			        inc     ecx
+ 0000011B  EB EF		        jmp     while2
 
 				        ; Now output the string.
- 00000171			outputstring2:
+ 0000011D			outputstring2:
 				        output  prompt1, string
 
- 0000018A  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 0000018F  C3			        ret
- 00000190			_MainProc ENDP
+ 00000136  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 0000013B  C3			        ret
+ 0000013C			_MainProc ENDP
 				END                             ; end of source code
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/12/23 11:36:25
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/12/23 12:06:58
 example.asm						     Symbols 2 - 1
 
 
@@ -200,28 +205,27 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 000000F2 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000190 Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000013C Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
 
                 N a m e                 Type     Value    Attr
 
-_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000190 Public
+_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000013C Public
   out1 . . . . . . . . . . . . .	L Near	 0000000C _TEXT	
   while1 . . . . . . . . . . . .	L Near	 00000030 _TEXT	
   movechar . . . . . . . . . . .	L Near	 0000003B _TEXT	
   outputstring . . . . . . . . .	L Near	 00000041 _TEXT	
-  doneLbl  . . . . . . . . . . .	L Near	 0000006E _TEXT	
-  getLen . . . . . . . . . . . .	L Near	 0000006E _TEXT	
-  forOne . . . . . . . . . . . .	L Near	 00000130 _TEXT	
-  forTwo . . . . . . . . . . . .	L Near	 00000130 _TEXT	
-  SwapLbl  . . . . . . . . . . .	L Near	 00000130 _TEXT	
-  display2 . . . . . . . . . . .	L Near	 00000130 _TEXT	
-  out2 . . . . . . . . . . . . .	L Near	 0000013C _TEXT	
-  while2 . . . . . . . . . . . .	L Near	 00000160 _TEXT	
-  movechar2  . . . . . . . . . .	L Near	 0000016B _TEXT	
-  outputstring2  . . . . . . . .	L Near	 00000171 _TEXT	
+  doneLbl  . . . . . . . . . . .	L Near	 0000008B _TEXT	
+  forOne . . . . . . . . . . . .	L Near	 0000008C _TEXT	
+  forTwo . . . . . . . . . . . .	L Near	 000000DC _TEXT	
+  SwapLbl  . . . . . . . . . . .	L Near	 000000DC _TEXT	
+  display2 . . . . . . . . . . .	L Near	 000000DC _TEXT	
+  out2 . . . . . . . . . . . . .	L Near	 000000E8 _TEXT	
+  while2 . . . . . . . . . . . .	L Near	 0000010C _TEXT	
+  movechar2  . . . . . . . . . .	L Near	 00000117 _TEXT	
+  outputstring2  . . . . . . . .	L Near	 0000011D _TEXT	
 
 
 Symbols:
