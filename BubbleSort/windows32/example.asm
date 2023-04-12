@@ -100,30 +100,28 @@ forOne:
       mov   j, ebx
       mov   ebx, 0 
 
-      jmp forTwo
- 
+
       mov   eax, 4              ; INCREMENT i 
       add   i, eax 
-
       inc    ecx
-      jmp    forOne
-      ; else
+
+      jmp forTwo
+
     
       
 forTwo:
       cmp   ebx, lim            ; EBX = counter for for loop 2
-      je    forOne
+      jge    forOne
 
       mov   eax, j              ; current location in mem
-      mov   edi, [eax]
+      mov   edi, [eax]          ; EDI HOLDS [j] OF ARRAY 
       cmp   edi, [eax+4]   ; if array[j] > array[j+1] jmp swap 
 
       add   j, 4                ; inc j (+4)
-      inc   ebx      
-      inc   ebx               ; inc ebx   
-      inc   ebx
+      inc   ebx     
+   
 
-      jg    swapLbl             ; jg swap
+      ;jg    swapLbl             ; jg swap
       ; else
       jmp forTwo                ; restart loop
 
