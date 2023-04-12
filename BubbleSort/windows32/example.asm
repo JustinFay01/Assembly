@@ -23,7 +23,10 @@ inlimit DWORD   ?
 n       DWORD   ?
 i       DWORD   0
 j       DWORD   0
+tmp     DWORD   0
 testStr DWORD   10 DUP (?), 0
+four    DWORD   4
+lim     DWORD   ?
 .CODE
 _MainProc PROC
 
@@ -67,49 +70,68 @@ outputstring:
 
         lea     ebx, array          ; Grab first value of array
         mov     ecx, [ebx]          ; Load its value into eax
-        jecxz   doneLbl             ; if itz zero just stop 
+        jecxz   display2            ; if itz zero just stop 
        
         mov     i, ebx              ; i becomes index
+        mov     j, ebx              ; j becomes index as well
 
 
         mov     n, LENGTHOF array
         mov     ecx, 0              ; reset ecx to 0 so we can coutn with it
         sub     n, 1                ; make it n -1
         cmp     n, 0                ; check if length of array is 0 
-        je      doneLbl             ; if the length is 0 the array is sorted
+        je      display2             ; if the length is 0 the array is sorted
 
         jmp     forOne              ; jmp to outer for loop
 
-doneLbl:
-    ret
-
 forOne:
       cmp   ecx, n  ; compare ecx and n (-1) 
-      je    doneLbl ; if equal done
+      je    display2 ; if equal done
 
       ; print value of arr
-      mov   ebx, i 
-      mov   eax, [ebx]          ; EAX HOLDS [i] OF ARRAY 
+      mov   ebx, i              ; ECX = counter for for loop 1 
+      mov   esi, [ebx]          ; ESI HOLDS [i] OF ARRAY 
 
-                                ; Set new j value
+      mov   ebx, n              ; Use ebx as temp register to find new limit for the inner for loop
+      sub   ebx, ecx
+      mov   lim, ebx
 
+      lea   ebx, array          ; j is now the start of the array
+      mov   j, ebx
+      mov   ebx, 0 
 
-     
-      mov   esi, 4              ; INCREMENT i 
-      add   i, esi 
+      jmp forTwo
+ 
+      mov   eax, 4              ; INCREMENT i 
+      add   i, eax 
 
-
-      
       inc    ecx
       jmp    forOne
       ; else
-      
     
-      ret
+      
 forTwo:
+      cmp   ebx, lim            ; EBX = counter for for loop 2
+      je    forOne
 
-SwapLbl:
+      mov   eax, j              ; current location in mem
+      mov   edi, [eax]
+      cmp   edi, [eax+4]   ; if array[j] > array[j+1] jmp swap 
 
+      add   j, 4                ; inc j (+4)
+      inc   ebx                 ; inc ebx   
+
+      jg    swapLbl             ; jg swap
+      ; else
+      jmp forTwo                ; restart loop
+
+
+
+swapLbl:
+        mov temp, esi
+        mov esi, edi
+        mov edi, temp
+        jmp forTwo
 
 
 ;***  Print the new sorted list

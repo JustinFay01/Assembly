@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/12/23 12:06:58
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/12/23 13:13:00
 example.asm						     Page 1 - 1
 
 
@@ -48,9 +48,12 @@ example.asm						     Page 1 - 1
  000000BA 00000000		n       DWORD   ?
  000000BE 00000000		i       DWORD   0
  000000C2 00000000		j       DWORD   0
- 000000C6  0000000A [		testStr DWORD   10 DUP (?), 0
+ 000000C6 00000000		tmp     DWORD   0
+ 000000CA  0000000A [		testStr DWORD   10 DUP (?), 0
 	    00000000
 	   ] 00000000
+ 000000F6 00000004		four    DWORD   4
+ 000000FA 00000000		lim     DWORD   ?
  00000000			.CODE
  00000000			_MainProc PROC
 
@@ -94,93 +97,113 @@ example.asm						     Page 1 - 1
 
  0000005A  8D 1D 00000000 R	        lea     ebx, array          ; Grab first value of array
  00000060  8B 0B		        mov     ecx, [ebx]          ; Load its value into eax
- 00000062  E3 27		        jecxz   doneLbl             ; if itz zero just stop 
+				        ;jecxz   doneLbl             ; if itz zero just stop 
 				       
- 00000064  89 1D 000000BE R	        mov     i, ebx              ; i becomes index
+ 00000062  89 1D 000000BE R	        mov     i, ebx              ; i becomes index
+ 00000068  89 1D 000000C2 R	        mov     j, ebx              ; j becomes index as well
 
 
- 0000006A  C7 05 000000BA R	        mov     n, LENGTHOF array
+ 0000006E  C7 05 000000BA R	        mov     n, LENGTHOF array
 	   0000000A
- 00000074  B9 00000000		        mov     ecx, 0              ; reset ecx to 0 so we can coutn with it
- 00000079  83 2D 000000BA R	        sub     n, 1                ; make it n -1
+ 00000078  B9 00000000		        mov     ecx, 0              ; reset ecx to 0 so we can coutn with it
+ 0000007D  83 2D 000000BA R	        sub     n, 1                ; make it n -1
 	   01
- 00000080  83 3D 000000BA R	        cmp     n, 0                ; check if length of array is 0 
+ 00000084  83 3D 000000BA R	        cmp     n, 0                ; check if length of array is 0 
 	   00
- 00000087  74 02		        je      doneLbl             ; if the length is 0 the array is sorted
+				        ;je      doneLbl             ; if the length is 0 the array is sorted
 
- 00000089  EB 01		        jmp     forOne              ; jmp to outer for loop
+ 0000008B  EB 00		        jmp     forOne              ; jmp to outer for loop
 
- 0000008B			doneLbl:
- 0000008B  C3			    ret
-
- 0000008C			forOne:
- 0000008C  3B 0D 000000BA R	      cmp   ecx, n  ; compare ecx and n (-1) 
- 00000092  74 F7		      je    doneLbl ; if equal done
+ 0000008D			forOne:
+ 0000008D  3B 0D 000000BA R	      cmp   ecx, n  ; compare ecx and n (-1) 
+ 00000093  74 65		      je    display2 ; if equal done
 
 				      ; print value of arr
- 00000094  8B 1D 000000BE R	      mov   ebx, i 
- 0000009A  8B 03		      mov   eax, [ebx]  
-				     
- 0000009C  BE 00000004		      mov   esi, 4
- 000000A1  01 35 000000BE R	      add   i, esi 
+ 00000095  8B 1D 000000BE R	      mov   ebx, i              ; ECX = counter for for loop 1 
+ 0000009B  8B 33		      mov   esi, [ebx]          ; ESI HOLDS [i] OF ARRAY 
 
-				      
-				      
-				      dtoa      testStr, eax
-				      output    testStr, testStr
+ 0000009D  8B 1D 000000BA R	      mov   ebx, n              ; Use ebx as temp register to find new limit for the inner for loop
+ 000000A3  2B D9		      sub   ebx, ecx
+ 000000A5  89 1D 000000FA R	      mov   lim, ebx
 
-				      
- 000000D8  41			      inc    ecx
- 000000D9  EB B1		      jmp    forOne
+ 000000AB  8D 1D 00000000 R	      lea   ebx, array          ; j is now the start of the array
+ 000000B1  89 1D 000000C2 R	      mov   j, ebx
+ 000000B7  BB 00000000		      mov   ebx, 0 
+
+ 000000BC  EB 0E		      jmp forTwo
+				 
+ 000000BE  B8 00000004		      mov   eax, 4              ; INCREMENT i 
+ 000000C3  01 05 000000BE R	      add   i, eax 
+
+ 000000C9  41			      inc    ecx
+ 000000CA  EB C1		      jmp    forOne
 				      ; else
-				      
 				    
- 000000DB  C3			      ret
- 000000DC			forTwo:
+				      
+ 000000CC			forTwo:
+ 000000CC  3B 1D 000000FA R	      cmp   ebx, lim            ; EBX = counter for for loop 2
+ 000000D2  74 B9		      je    forOne
 
- 000000DC			SwapLbl:
+ 000000D4  A1 000000C2 R	      mov   eax, j              ; current location in mem
+ 000000D9  8B 38		      mov   edi, [eax]
+ 000000DB  3B 78 04		      cmp   edi, [eax+4]   ; if array[j] > array[j+1] jmp swap 
 
+ 000000DE  83 05 000000C2 R	      add   j, 4                ; inc j (+4)
+	   04
+ 000000E5  43			      inc   ebx                 ; inc ebx   
+
+ 000000E6  7F 02		      jg    swapLbl             ; jg swap
+				      ; else
+ 000000E8  EB E2		      jmp forTwo                ; restart loop
+
+
+
+ 000000EA			swapLbl:
+ 000000EA  89 35 00000028 R	        mov temp, esi
+ 000000F0  8B F7		        mov esi, edi
+ 000000F2  8B 3D 00000028 R	        mov edi, temp
+ 000000F8  EB D2		        jmp forTwo
 
 
 				;***  Print the new sorted list
 
- 000000DC			display2:
+ 000000FA			display2:
 				        ; ECX holds the address of the string being built
- 000000DC  8D 0D 0000002C R	        lea	   ecx, string
+ 000000FA  8D 0D 0000002C R	        lea	   ecx, string
 
 				        ; EBX will hold the address of the current item in the array
- 000000E2  8D 1D 00000000 R	        lea    ebx, array
+ 00000100  8D 1D 00000000 R	        lea    ebx, array
 
 				        ; Look for the 0 at the end of the list
- 000000E8  8B 03		out2:   mov    eax, [ebx]
- 000000EA  3C 00		        cmp    al, 0
- 000000EC  74 2F		        je     outputstring2
+ 00000106  8B 03		out2:   mov    eax, [ebx]
+ 00000108  3C 00		        cmp    al, 0
+ 0000010A  74 2F		        je     outputstring2
 
 				        ; Convert the number to a series of characters
 				        dtoa   numstr, eax
 
 				        ; Copy the characters to the string being build
- 00000106  8D 15 00000090 R	        lea    edx, numstr
- 0000010C  8B 02		while2: mov     eax, [edx]
- 0000010E  3C 00		        cmp     al, 0
- 00000110  75 05		        jne     movechar2
- 00000112  83 C3 04		        add     ebx,4
- 00000115  EB D1		        jmp     out2
- 00000117			movechar2:
- 00000117  89 01		        mov     [ecx], eax      ; Move the character
- 00000119  42			        inc     edx             ; Increment counters
- 0000011A  41			        inc     ecx
- 0000011B  EB EF		        jmp     while2
+ 00000124  8D 15 00000090 R	        lea    edx, numstr
+ 0000012A  8B 02		while2: mov     eax, [edx]
+ 0000012C  3C 00		        cmp     al, 0
+ 0000012E  75 05		        jne     movechar2
+ 00000130  83 C3 04		        add     ebx,4
+ 00000133  EB D1		        jmp     out2
+ 00000135			movechar2:
+ 00000135  89 01		        mov     [ecx], eax      ; Move the character
+ 00000137  42			        inc     edx             ; Increment counters
+ 00000138  41			        inc     ecx
+ 00000139  EB EF		        jmp     while2
 
 				        ; Now output the string.
- 0000011D			outputstring2:
+ 0000013B			outputstring2:
 				        output  prompt1, string
 
- 00000136  B8 00000000		        mov     eax, 0  ; exit with return code 0
- 0000013B  C3			        ret
- 0000013C			_MainProc ENDP
+ 00000154  B8 00000000		        mov     eax, 0  ; exit with return code 0
+ 00000159  C3			        ret
+ 0000015A			_MainProc ENDP
 				END                             ; end of source code
-Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/12/23 12:06:58
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    04/12/23 13:13:00
 example.asm						     Symbols 2 - 1
 
 
@@ -204,28 +227,27 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 000000F2 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000013C Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 000000FE Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000015A Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
 
                 N a m e                 Type     Value    Attr
 
-_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000013C Public
+_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000015A Public
   out1 . . . . . . . . . . . . .	L Near	 0000000C _TEXT	
   while1 . . . . . . . . . . . .	L Near	 00000030 _TEXT	
   movechar . . . . . . . . . . .	L Near	 0000003B _TEXT	
   outputstring . . . . . . . . .	L Near	 00000041 _TEXT	
-  doneLbl  . . . . . . . . . . .	L Near	 0000008B _TEXT	
-  forOne . . . . . . . . . . . .	L Near	 0000008C _TEXT	
-  forTwo . . . . . . . . . . . .	L Near	 000000DC _TEXT	
-  SwapLbl  . . . . . . . . . . .	L Near	 000000DC _TEXT	
-  display2 . . . . . . . . . . .	L Near	 000000DC _TEXT	
-  out2 . . . . . . . . . . . . .	L Near	 000000E8 _TEXT	
-  while2 . . . . . . . . . . . .	L Near	 0000010C _TEXT	
-  movechar2  . . . . . . . . . .	L Near	 00000117 _TEXT	
-  outputstring2  . . . . . . . .	L Near	 0000011D _TEXT	
+  forOne . . . . . . . . . . . .	L Near	 0000008D _TEXT	
+  forTwo . . . . . . . . . . . .	L Near	 000000CC _TEXT	
+  swapLbl  . . . . . . . . . . .	L Near	 000000EA _TEXT	
+  display2 . . . . . . . . . . .	L Near	 000000FA _TEXT	
+  out2 . . . . . . . . . . . . .	L Near	 00000106 _TEXT	
+  while2 . . . . . . . . . . . .	L Near	 0000012A _TEXT	
+  movechar2  . . . . . . . . . .	L Near	 00000135 _TEXT	
+  outputstring2  . . . . . . . .	L Near	 0000013B _TEXT	
 
 
 Symbols:
@@ -247,16 +269,19 @@ array  . . . . . . . . . . . . .	DWord	 00000000 _DATA
 atodproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
 atowproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
 dtoaproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
+four . . . . . . . . . . . . . .	DWord	 000000F6 _DATA	
 inlimit  . . . . . . . . . . . .	DWord	 000000B6 _DATA	
 i  . . . . . . . . . . . . . . .	DWord	 000000BE _DATA	
 j  . . . . . . . . . . . . . . .	DWord	 000000C2 _DATA	
+lim  . . . . . . . . . . . . . .	DWord	 000000FA _DATA	
 numstr . . . . . . . . . . . . .	Byte	 00000090 _DATA	
 n  . . . . . . . . . . . . . . .	DWord	 000000BA _DATA	
 prompt1  . . . . . . . . . . . .	Byte	 0000009C _DATA	
 prompt2  . . . . . . . . . . . .	Byte	 000000AA _DATA	
 string . . . . . . . . . . . . .	Byte	 0000002C _DATA	
 temp . . . . . . . . . . . . . .	DWord	 00000028 _DATA	
-testStr  . . . . . . . . . . . .	DWord	 000000C6 _DATA	
+testStr  . . . . . . . . . . . .	DWord	 000000CA _DATA	
+tmp  . . . . . . . . . . . . . .	DWord	 000000C6 _DATA	
 wtoaproc . . . . . . . . . . . .	L Near	 00000000 FLAT	External
 
 	   0 Warnings
