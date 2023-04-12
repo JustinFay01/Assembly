@@ -120,7 +120,8 @@ forTwo:
 
       add   j, 4                ; inc j (+4)
       inc   ebx      
-      inc ebx               ; inc ebx   
+      inc   ebx               ; inc ebx   
+      inc   ebx
 
       jg    swapLbl             ; jg swap
       ; else
