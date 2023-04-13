@@ -24,6 +24,7 @@ n       DWORD   ?
 i       DWORD   0
 j       DWORD   0
 tmp     DWORD   0
+tmp2    DWORD   0
 testStr DWORD   10 DUP (?), 0
 four    DWORD   4
 lim     DWORD   ?
@@ -116,18 +117,23 @@ forTwo:
       cmp   edi, [eax+4]        ; if array[j] > array[j+1] jmp swap 
 
   
-      ;jg    swapLbl             ; jg swap
+      jg    swapLbl             ; jg swap
 
       ; ELSE
       add   j, 4                ; inc j (+4)
       inc   ebx     
       jmp forTwo                ; restart loop
 
-
+; Arr = 10, 30, 20, 100, 90, 30, 9, 40, 35, 0
 
 swapLbl:
-       
+       mov  tmp, edi             ; temp = arr[j]
+       mov  edi, [eax + 4]       ; store arr[j+1] in EDI
+   
+       mov  [eax], edi           ; arr[j] = arr[j+1]
 
+       mov  edi, tmp             ; mov arr[j] back into edi 
+       mov  [eax+4], edi         ; arr[j+1] = tmp
         
        add   j, 4                ; inc j (+4)
        inc   ebx     
@@ -166,7 +172,7 @@ movechar2:
 
         ; Now output the string.
 outputstring2:
-        output  prompt1, string
+        output  prompt2, string
 
         mov     eax, 0  ; exit with return code 0
         ret
