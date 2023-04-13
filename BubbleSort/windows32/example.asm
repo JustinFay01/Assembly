@@ -25,6 +25,11 @@ i       DWORD   0
 j       DWORD   0
 tmp     DWORD   0
 tmp2    DWORD   0
+
+t1      DWORD   0
+t2      DWORD   0
+
+
 testStr DWORD   10 DUP (?), 0
 four    DWORD   4
 lim     DWORD   ?
@@ -127,19 +132,16 @@ forTwo:
 ; Arr = 10, 30, 20, 100, 90, 30, 9, 40, 35, 0
 
 swapLbl:
-       mov  tmp, edi             ; temp = arr[j]
-       mov  edi, [eax + 4]       ; store arr[j+1] in EDI
-   
-       mov  [eax], edi           ; arr[j] = arr[j+1]
+       mov esi, [eax+4]
 
-       mov  edi, tmp             ; mov arr[j] back into edi 
-       mov  [eax+4], edi         ; arr[j+1] = tmp
-        
-       add   j, 4                ; inc j (+4)
-       inc   ebx     
-       jmp forTwo                ; restart loop
+       
+       mov [eax], esi
+       mov [eax+4], edi
+       
 
-
+       add j, 4
+       inc ebx
+       jmp forTwo
 ;***  Print the new sorted list
 
 display2:
