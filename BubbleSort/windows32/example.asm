@@ -152,7 +152,7 @@ display2:
         lea    ebx, array
 
         ; Look for the 0 at the end of the list
-out2:   mov    eax, [ebx]
+out2:   mov    eax, [ebx+4]
         cmp    al, 0
         je     outputstring2
 
