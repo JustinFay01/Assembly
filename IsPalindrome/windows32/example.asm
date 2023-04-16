@@ -10,11 +10,11 @@ INCLUDE io.h            ; header file for input/output
 
 .DATA
 
-prompt  BYTE    "Enter phrase", 0
-string  BYTE    40 DUP (?)
-notPalindrome BYTE  "This is not a palindrome", 0
-palindrome    BYTE  "This is a palindrome", 0
-length  DWORD   ?
+prompt          BYTE    "Enter phrase", 0
+string          BYTE    40 DUP (?)
+notPalindrome   BYTE    "This is not a palindrome", 0
+palindrome      BYTE    "This is a palindrome", 0
+;length          DWORD   ?
 
 .CODE
 
@@ -22,24 +22,38 @@ _MainProc PROC
 
 ;  Read the string from the user
 
-        input   prompt, string, 40   
+        input   prompt, string, 40  
+        lea     eax,    string
+        mov     ebx,    [eax]
+        cmp     ebx, 0
+        jz      LENDONE
 
 ;  Find the length of the string
+LEN:
+    inc ecx
+    inc eax
 
-;;;;;;;;;; PUT CODE HERE
+    mov ebx, [eax]
+    cmp ebx, 0
+    jz  LENDONE
+    jmp LEN
 
+LENDONE:
 ;  Now we have the length of the string.  Let's analyze the front 
 ;  of the string and the end of the string.
+    mov     length, ecx
 
-;;;;;;;;;; COMPARE THE FRONT TO THE END
-;;;;;;;;;; JMP TO YES if it is a palindrome
-;;;;;;;;;; JMP TO NO if it is not a palindrome
+
+
 
 ;  Report YES!
         output  prompt, palindrome
 		jmp     DONE
 		
 ;  Report NO!
+
+
+    
 REPORTNO:     
         output  prompt, notPalindrome
 
