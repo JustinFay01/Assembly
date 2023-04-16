@@ -9,15 +9,13 @@ INCLUDE io.h            ; header file for input/output
 .STACK 4096
 
 .DATA
-
 prompt          BYTE    "Enter phrase", 0
 string          BYTE    40 DUP (?)
 notPalindrome   BYTE    "This is not a palindrome", 0
 palindrome      BYTE    "This is a palindrome", 0
-;length          DWORD   ?
+strLen          DWORD   ?
 
 .CODE
-
 _MainProc PROC
 
 ;  Read the string from the user
@@ -26,33 +24,49 @@ _MainProc PROC
         lea     eax,    string
         mov     ebx,    [eax]
         cmp     ebx, 0
-        jz      LENDONE
+        jz      COMPARE
 
 ;  Find the length of the string
 LEN:
-    inc ecx
+    inc ecx         ; ecx = lenth of str
     inc eax
 
     mov ebx, [eax]
-    cmp ebx, 0
-    jz  LENDONE
+    cmp ebx, 0      ; look for null termiantor
+    jz  COMPARE
     jmp LEN
 
-LENDONE:
+COMPARE:
 ;  Now we have the length of the string.  Let's analyze the front 
 ;  of the string and the end of the string.
-    mov     length, ecx
+    mov     strLen, ecx
+    dec     strLen            ; set strLen to be one less than the null terminatior
 
+    lea     ecx, string       ; reset ecx for start of array 
+    mov     ebx, strLen       ; Store length of array in ebx
+    add     ebx, ecx          ; add length of array and starting point in memory of array                           
+                              ; use ebx for end of array
+looper:
+    ; ESI for I values and EDI for J values
+    mov     al, [ecx]       
+    mov     dl, [ebx]
 
+    cmp     al, dl        ; if any are not equal jump to no
+    jnz     REPORTNO
+        
+    
+    inc     ecx                 ; i++ j--
+    dec     ebx     
+    cmp     ecx, ebx
+    jnle    REPORTYES           ; if i > j 
+    jnz     looper              ; else if ecx and ebx (i and j) are not equal continue loop otherwise report yes 
+    
 
-
-;  Report YES!
+REPORTYES:
         output  prompt, palindrome
 		jmp     DONE
 		
 ;  Report NO!
-
-
     
 REPORTNO:     
         output  prompt, notPalindrome
