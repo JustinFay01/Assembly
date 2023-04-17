@@ -22,19 +22,33 @@ _MainProc PROC
 
         input   prompt, string, 40  
         lea     eax,    string
-        mov     ebx,    [eax]
-        cmp     ebx, 0
-        jz      COMPARE
+        
+; ///////////////////CHANGE CAPITAL TO LOWER CASE ///////////////////////
+toLowerCase:
+    mov ebx,[eax]       ; Get char
+    cmp ebx, 0          ; Check if char is null terminator
+    jz  COMPARE             ; if so jump to compare
 
-;  Find the length of the string
-LEN:
-    inc ecx         ; ecx = lenth of str
+    ; check if the value is upper case
+    cmp bl, 'A'    ; check A
+    jge checkZ      ; if str[i] >= 'A'
+    jmp incLbl      ; else increment and restart
+
+checkZ: ; check Z
+    cmp bl, 'Z'
+    jle changeCase  ; if it is <= Z then change chase
+    jmp incLbl
+
+changeCase: ; str[i] >= A && str[i] <= Z
+    add bl, 32
+    mov [eax], bl
+    jmp incLbl
+
+incLbl:
+    inc ecx
     inc eax
-
-    mov ebx, [eax]
-    cmp ebx, 0      ; look for null termiantor
-    jz  COMPARE
-    jmp LEN
+    jmp toLowerCase
+; /////////////////////// CAPITAL IS NOW LOWERCASE ////////////////////////
 
 COMPARE:
 ;  Now we have the length of the string.  Let's analyze the front 
