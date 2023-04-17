@@ -73,7 +73,7 @@ skipJ:    ; check if j is a letter
     mov     dl, [ebx]      ; load new value
     cmp     dl, 'a'       
     jge     checkZforJ     ; if str[j] >= a check if it is less than z
-    inc     ebx            ; else inc ebx and try again
+    dec     ebx            ; else dec ebx (j--) and try again
     jmp     skipJ          
 
 doneSkip:    
@@ -95,7 +95,7 @@ checkZforI:
 checkZforJ:
     cmp dl, 'z'
     jle doneSkip ; if str[j] <= z, its a letter jump to check if str[i] == str[j]
-    inc ebx
+    dec ebx
     jmp skipJ    ; else jmp back to skip j to see if next val is a letter
 
 REPORTYES:
