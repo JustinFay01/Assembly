@@ -65,7 +65,7 @@ looper:
 skipI:    ; check if i is a letter
     mov     al, [ecx]        ; move new value
     cmp     al, 'a'         
-    jge      checkZforI      ; if str[i] >= 'a' check if it is less than z
+    jge     checkZforI      ; if str[i] >= 'a' check if it is less than z
     inc     ecx              ; else inc ecx and check again
     jmp     skipI
 
@@ -83,7 +83,7 @@ doneSkip:
     inc     ecx                 ; i++ j--
     dec     ebx     
     cmp     ecx, ebx
-    jnle    REPORTYES           ; if i > j 
+    jge    REPORTYES           ; if i >= j 
     jnz     looper              ; else if ecx and ebx (i and j) are not equal continue loop otherwise report yes 
 
 checkZforI:
