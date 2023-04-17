@@ -61,20 +61,42 @@ COMPARE:
     add     ebx, ecx          ; add length of array and starting point in memory of array                           
                               ; use ebx for end of array
 looper:
-    ; ESI for I values and EDI for J values
-    mov     al, [ecx]       
-    mov     dl, [ebx]
+    ;  ECX for I values and EDI for J values
+skipI:    ; check if i is a letter
+    mov     al, [ecx]        ; move new value
+    cmp     al, 'a'         
+    jge      checkZforI      ; if str[i] >= 'a' check if it is less than z
+    inc     ecx              ; else inc ecx and check again
+    jmp     skipI
 
+skipJ:    ; check if j is a letter
+    mov     dl, [ebx]      ; load new value
+    cmp     dl, 'a'       
+    jge     checkZforJ     ; if str[j] >= a check if it is less than z
+    inc     ebx            ; else inc ebx and try again
+    jmp     skipJ          
+
+doneSkip:    
     cmp     al, dl        ; if any are not equal jump to no
     jnz     REPORTNO
-        
     
     inc     ecx                 ; i++ j--
     dec     ebx     
     cmp     ecx, ebx
     jnle    REPORTYES           ; if i > j 
     jnz     looper              ; else if ecx and ebx (i and j) are not equal continue loop otherwise report yes 
-    
+
+checkZforI:
+    cmp al, 'z' 
+    jle skipJ   ; if stir[i] <= z, its a letter jump to skip j
+    inc ecx
+    jmp skipI   ; else jmp back to skip i to see if the next val is letter
+
+checkZforJ:
+    cmp dl, 'z'
+    jle doneSkip ; if str[j] <= z, its a letter jump to check if str[i] == str[j]
+    inc ebx
+    jmp skipJ    ; else jmp back to skip j to see if next val is a letter
 
 REPORTYES:
         output  prompt, palindrome
