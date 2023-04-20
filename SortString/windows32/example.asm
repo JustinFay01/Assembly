@@ -27,42 +27,24 @@ strBuff  BYTE    100 DUP (?)
 _MainProc PROC
 
 ;*************** Insertion Sort Code ************************
-        input   inWrd, inString, 100
+        input inWrd, inString, 100
+
+; start by getting len of word        
+        lea eax, inString
+
+LEN:
+    inc ecx         ; ecx = lenth of str
+    inc eax
+
+    mov ebx, [eax]
+    cmp ebx, 0      ; look for null termiantor
+    jz  forOne
+    jmp LEN
+
+forOne:
 
 ;***  Print the new sorted list
-
-display2:
-        ; ECX holds the address of the string being built
-        lea	   ecx, string
-
-        ; EBX will hold the address of the current item in the array
-        lea    ebx, array
-
-        ; Look for the 0 at the end of the list
-out2:   mov    eax, [ebx]
-        cmp    al, 0
-        je     outputstring2
-
-        ; Convert the number to a series of characters
-        dtoa   numstr, eax
-
-        ; Copy the characters to the string being build
-        lea    edx, numstr
-while2: mov     eax, [edx]
-        cmp     al, 0
-        jne     movechar2
-        add     ebx,4
-        jmp     out2
-movechar2:
-        mov     [ecx], eax      ; Move the character
-        inc     edx             ; Increment counters
-        inc     ecx
-        jmp     while2
-
-        ; Now output the string.
-outputstring2:
-        output  prompt2, string
-
+        output  strBuff, strBuff
         mov     eax, 0  ; exit with return code 0
         ret
 _MainProc ENDP
