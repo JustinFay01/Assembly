@@ -65,15 +65,37 @@ forOne:
     cmp minVar, al
     jg  minSwap
 
-    inc ecx
-    jmp forOne
+    ;inc ecx
+    ;jmp forOne
 
 minSwap:
     mov minAdd, ecx
     mov minVar, al
-    inc ecx
-    jmp forOne
+    ;inc ecx
+    jmp loadJ
 
+loadJ:
+    mov esi, 0
+    mov esi, ecx
+    inc esi
+
+forTwo:
+    cmp esi, n              ; if esi >= n jump back to forOne
+    jge forOne
+    mov eax, inString[esi]  ; mov char into eax
+    cmp minVar, al          ; compare minVar to arr[j]
+    jg upMin                ; if min > arr[j]
+    ; else inc and check again
+    inc esi
+    jmp forTwo
+  
+upMin: ; minIndex = j
+    mov minAdd, esi
+    mov ebx, inString[esi]
+    mov minVar, bl
+    inc esi
+    jmp forTwo
+    
 
 loadBuff:
     lea edx, strBuff
