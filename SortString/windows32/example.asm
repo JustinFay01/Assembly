@@ -23,6 +23,8 @@ inlimit DWORD   ?
 inString DWORD   100 DUP (?)
 inWrd    BYTE    "Enter a word you would like to sort", 0
 strBuff  BYTE    100 DUP (?)
+n        DWORD    ?
+min      BYTE     'z'
 .CODE
 _MainProc PROC
 
@@ -34,15 +36,35 @@ _MainProc PROC
 
 LEN:
     inc ecx         ; ecx = lenth of str
-    inc eax
+    inc eax         
 
     mov ebx, [eax]
     cmp ebx, 0      ; look for null termiantor
-    jz  forOne
+    jz  startLbl
     jmp LEN
 
-forOne:
+startLbl:
+    ; get start of array, len of arr = n + 1
+    lea eax, inString   ; ecx = i
+    mov n, ecx
+    mov ecx, 0
 
+forOne: ; Find the minimum element in unsorted array
+    cmp ecx, n
+    jge  doneLbl    ; if ecx < n jmp done
+    ;else find smallest element
+    mov bl, [ecx+eax]
+    cmp min, bl     ; if min > bl jmp new min
+    jg  newMin
+    inc ecx
+    jmp forOne
+
+newMin:
+    mov min, bl
+    inc ecx
+    jmp forOne
+
+doneLbl:
 ;***  Print the new sorted list
         output  strBuff, strBuff
         mov     eax, 0  ; exit with return code 0
