@@ -20,7 +20,7 @@ prompt1 BYTE    "Unsorted List", 0
 prompt2 BYTE    "Sorted List", 0
 inlimit DWORD   ?
 
-inString DWORD   100 DUP (?)
+inString BYTE   100 DUP (?)
 inWrd    BYTE    "Enter a word you would like to sort", 0
 strBuff  BYTE    100 DUP (?)
 n        DWORD    ?
@@ -62,7 +62,7 @@ forOne:
     cmp ecx, n      ; if ecx >= n jmp loadBuff
     jge loadBuff
     ;else find minimum element index
-    mov eax, inString[ecx]
+    mov al, inString[ecx]
     cmp minVar, al
     jg  minSwap
 
@@ -83,7 +83,7 @@ loadJ:
 forTwo:
     cmp esi, n              ; if esi >= n jump back to forOne
     jge swapLbl
-    mov eax, inString[esi]  ; mov char into eax
+    mov al, inString[esi]  ; mov char into eax
     cmp minVar, al          ; compare minVar to arr[j]
     jg upMin                ; if min > arr[j]
     ; else inc and check again
@@ -92,23 +92,23 @@ forTwo:
   
 upMin: ; minIndex = j
     mov minAdd, esi
-    mov ebx, inString[esi]
+    mov bl, inString[esi]
     mov minVar, bl
     inc esi
     jmp forTwo
   
 swapLbl:
     mov ebx, 0
-    mov ebx, inString[ecx]
+    mov bl, inString[ecx]
     mov edx, minAdd
-    AND ebx, 255
-    mov inString[edx], ebx
+    mov inString[edx], bl
     
     
     mov ebx, 0
     mov bl, minVar
-    mov inString[ecx], ebx
+    mov inString[ecx], bl
     inc esi
+    inc ecx
     jmp forOne
 
 
@@ -121,7 +121,7 @@ looper:
     cmp ecx, n
     jge doneLbl
 
-    mov  ebx, inString[ecx]
+    mov  bl, inString[ecx]
     mov  al, bl
    
     mov strBuff[ecx], al 
