@@ -25,6 +25,7 @@ inWrd    BYTE    "Enter a word you would like to sort", 0
 strBuff  BYTE    100 DUP (?)
 n        DWORD    ?
 min      BYTE     'z'
+tmp      BYTE      ?
 .CODE
 _MainProc PROC
 
@@ -56,13 +57,32 @@ forOne: ; Find the minimum element in unsorted array
     mov bl, [ecx+eax]
     cmp min, bl     ; if min > bl jmp new min
     jg  newMin
-    inc ecx
-    jmp forOne
+    jmp setJ        ; update j with i + 1
+
+    
+forTwo:
+    cmp edi, n      ; edi = j
+    jge forOne
+    mov edx, [eax+edi] ; strArray[j]
+    cmp dl, min
+    jl  swapLbl     ; if dl < min jmp swap
+    inc edi         ; else j++
+    jmp forTwo        
+
+swapLbl:
+    mov tmp, dl ; tmp = arr[j]
+    mov dl,     ; min
+    
+
+setJ:
+    mov edi, ecx    ; set edi = j = i (ecx)
+    inc edi         ; i+1 (edi++)
+    jmp forTwo      ;Start innerLoop
 
 newMin:
     mov min, bl
     inc ecx
-    jmp forOne
+    jmp setJ     ; update j with i + 1
 
 doneLbl:
 ;***  Print the new sorted list
