@@ -53,15 +53,26 @@ LEN:
 
 startLbl:
     ; get start of array, len of arr = n + 1
-    lea eax, inString   ; ecx = i
+    ;lea eax, inString   ; ecx = i
     mov n, ecx
     mov ecx, 0
 
 forOne:
-    cmp ecx, n
-    jge doneLbl
+    cmp ecx, n      ; if ecx >= n jmp loadBuff
+    jge loadBuff
+    ;else find minimum element index
+    mov eax, inString[ecx]
+    cmp minVar, al
+    jg  minSwap
+
     inc ecx
-    jmp loadBuff
+    jmp forOne
+
+minSwap:
+    mov minAdd, ecx
+    mov minVar, al
+    inc ecx
+    jmp forOne
 
 
 loadBuff:
