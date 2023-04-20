@@ -101,7 +101,9 @@ swapLbl:
     mov ebx, 0
     mov ebx, inString[ecx]
     mov edx, minAdd
+    AND ebx, 255
     mov inString[edx], ebx
+    
     
     mov ebx, 0
     mov bl, minVar
