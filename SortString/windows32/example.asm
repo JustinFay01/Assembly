@@ -41,6 +41,7 @@ _MainProc PROC
 
 ; start by getting len of word        
         lea eax, inString
+       
 
 LEN:
     inc ecx         ; ecx = lenth of str
@@ -81,7 +82,7 @@ loadJ:
 
 forTwo:
     cmp esi, n              ; if esi >= n jump back to forOne
-    jge forOne
+    jge swapLbl
     mov eax, inString[esi]  ; mov char into eax
     cmp minVar, al          ; compare minVar to arr[j]
     jg upMin                ; if min > arr[j]
@@ -95,7 +96,19 @@ upMin: ; minIndex = j
     mov minVar, bl
     inc esi
     jmp forTwo
+  
+swapLbl:
+    mov ebx, 0
+    mov ebx, inString[ecx]
+    mov edx, minAdd
+    mov inString[edx], ebx
     
+    mov ebx, 0
+    mov bl, minVar
+    mov inString[ecx], ebx
+    inc esi
+    jmp forOne
+
 
 loadBuff:
     lea edx, strBuff
