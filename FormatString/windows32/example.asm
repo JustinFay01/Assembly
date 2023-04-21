@@ -8,7 +8,7 @@ INCLUDE io.h            ; header file for input/output
 .DATA
 
 sentence    BYTE        100 DUP (?)
-strBuff     BYTE        100 DUP (?)
+strBuff     DWORD       ?
 inPrompt    BYTE        "Enter a sentence you would like to format", 0
 n           DWORD       ?
 
@@ -18,11 +18,26 @@ _MainProc PROC
     input   inPrompt, sentence, 100
     ; find len of sentece
 
+LEN:
+    inc ecx         ; ecx = lenth of str
+    inc eax         
 
+    mov ebx, [eax]
+    cmp ebx, 0      ; look for null termiantor
+    jz  startLbl
+    jmp LEN
 
+startLbl:
+    mov n, ecx
+    mov ecx, 0
+    mov ebx, 0
 
-    push strBuff    ; push param2
-    push sentence   ; push param1
+forLoop:
+    cmp ecx, n
+    jge loadBuff
+
+    push strBuff   ;eax = strBuff             ; push param2
+    push ebx       ;ebx = character to check  ; push param1
     call fctn1
     
 
@@ -65,7 +80,11 @@ fctn1   PROC
 
         pop     ebx             ; restore EBX
         pop     ebp             ; restore EBP
-        ret                     ; return      
+        ret                     ; return   
+        
+
+
+
 fctn1   ENDP
 
 END                             ; end of source code
