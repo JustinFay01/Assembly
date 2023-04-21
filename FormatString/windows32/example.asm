@@ -16,6 +16,7 @@ n           DWORD       ?
 .CODE
 _MainProc PROC
     input   inPrompt, sentence, 100
+    lea     eax, sentence
     ; find len of sentece
 
 LEN:
@@ -34,32 +35,17 @@ startLbl:
 
 forLoop:
     cmp ecx, n
-    jge loadBuff
+    jge doneLbl
 
     push strBuff   ;eax = strBuff             ; push param2
     push ebx       ;ebx = character to check  ; push param1
-    call fctn1
+    call fctn1     ;returns formatted char already in strBuff
     
-
-        
-loadBuff:
-    lea edx, strBuff
-    mov eax, 0
-    mov ecx, 0
-    mov ebx, 0
-looper:
-    ;cmp ecx, 
-    jge doneLbl
-
-    ;mov  bl, inString[ecx]
-    mov  al, bl
-   
-    ;mov strBuff[ecx], al 
     inc ecx
-    jmp looper
+    jmp forLoop
+
 
 doneLbl:
-;***  Print the new formatted list
         output  strBuff, strBuff
         mov     eax, 0  ; exit with return code 0
         ret
