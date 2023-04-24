@@ -44,8 +44,22 @@ _MainProc   ENDP
 findmin	PROC
 
 ; FILL IN CODE HERE!!!
+        push    ebp             ; save base pointer
+        mov     ebp, esp        ; establish stack frame
+        push    ebx
+        push    ecx
+        push    edx
 
-        ret                  
+
+
+        
+        pop     edx
+        pop     ecx
+        pop     ebx
+        pop     ebp             ; restore EBP
+        
+        ;mov    eax, min
+        ret                      ; return      
 		
 findmin ENDP
 
