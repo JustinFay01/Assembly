@@ -46,19 +46,26 @@ findmin	PROC
 ; FILL IN CODE HERE!!!
         push    ebp             ; save base pointer
         mov     ebp, esp        ; establish stack frame
-        push    ebx
-        push    ecx
-        push    edx
+        push    ebx             ; i 
+        push    ecx             ; length of array
+        push    edx             ; location of array
 
+        mov     ebx, dword ptr [ebp + 16] ; --> ebp + 16 is the First Param which is the index
+        mov     edx, dword ptr [ebp + 8]  ; --> ebp + 8 gets third param which is closest and passed the return val
+        mov     ecx, dword ptr [ebp + 12] ; --> ebp + 12 is the Second Param which is the len of arr
 
-
+        cmp ebx, ecx
+        jge doneLbl
         
+
+
+doneLbl:
+        
+        mov    eax, [edx + ebx*4]
         pop     edx
         pop     ecx
         pop     ebx
         pop     ebp             ; restore EBP
-        
-        ;mov    eax, min
         ret                      ; return      
 		
 findmin ENDP
