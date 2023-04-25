@@ -22,7 +22,7 @@ _MainProc PROC
         ; Load up the parameters
         mov     eax, 0   
         push    eax   
-        mov     eax, 11
+        mov     eax, 10
         push    eax    
 		lea     eax, array
 		push    eax  
@@ -54,14 +54,21 @@ findmin	PROC
         mov     edx, dword ptr [ebp + 8]  ; --> ebp + 8 gets third param which is closest and passed the return val
         mov     ecx, dword ptr [ebp + 12] ; --> ebp + 12 is the Second Param which is the len of arr
 
-        cmp ebx, ecx
-        jge doneLbl
+        cmp     ebx, ecx
+        jge     doneLbl
         
+        ; RECURSIVE CALL
+        inc     ebx                     ; inc ebx
+        mov     eax, [edx + ebx*4]      ; load new val of array
+        push    ebx
+        push    ecx
+        push    edx
+        call findMin
+        ; Clear params for recursive call
+        add esp, 12 
 
 
 doneLbl:
-        
-        mov    eax, [edx + ebx*4]
         pop     edx
         pop     ecx
         pop     ebx
