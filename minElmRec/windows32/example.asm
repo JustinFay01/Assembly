@@ -66,7 +66,14 @@ findmin	PROC
         call findMin
         ; Clear params for recursive call
         add esp, 12 
+        cmp [edx + ebx*4], eax
+        jl  retCurr
+        jmp doneLbl
 
+retCurr:
+        mov eax, [edx + ebx*4]
+        jmp doneLbl
+    
 
 doneLbl:
         pop     edx
