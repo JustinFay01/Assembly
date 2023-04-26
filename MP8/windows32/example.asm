@@ -97,7 +97,23 @@ isPal	PROC
         cmp     edi, esi        ; if i > j done
         jg      doneLbl
 
+        ; CHECK IF ARR[i] IS A LETTER
 
+        mov    bl, [edx+edi]
+        cmp    bl, 'a'          
+        jl     skipI            ; if bl < 'a' skip i (not a letter)
+        cmp    bl, 'z'
+        jg     skipI            ; if bl > 'z' skip i (not a letter)
+
+        ; else
+        ; CHECK IF ARR[j] IS A LETTER
+        mov    bl, [edx+esi]
+        cmp    bl, 'a'
+        jl     skipJ        ; if bl < 'a' skip j (not a letter)
+        cmp    bl, 'z'
+        jg     skipJ        ; if bl > 'z' skip j (not a letter)
+
+        ;else compare values becasue they are both letters
         mov    bl, [edx+edi]
         cmp    bl, [edx+esi]
         jnz    notPal           ; if arr[i] != arr[j] return 0
@@ -108,10 +124,10 @@ isPal	PROC
 
        pop ebx  ; pop local variable which is the current char
 
-       push edi ; push i
-       push esi ; push j
-       push edx ; push local in mem of arr
+       jmp newPush
 
+       
+newRec:
        call isPal  ; recursive call
        add esp, 12 ; clear params
 
@@ -121,6 +137,20 @@ isPal	PROC
        pop     ebx
        pop     ebp 
        ret
+
+
+skipI:
+    inc edi
+    jmp newPush
+
+skipJ:
+    dec esi
+
+newPush:
+       push edi ; push i
+       push esi ; push j
+       push edx ; push local in mem of arr
+       jmp  newRec
 
 doneLbl:
        pop     ebx
@@ -137,6 +167,7 @@ notPal:
        pop     ebx
        pop     edx
        pop     esi
+       pop     ebx
        pop     ebp 
 
        mov eax, 0       ; return 0
