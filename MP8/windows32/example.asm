@@ -120,7 +120,6 @@ isPal	PROC
        pop     esi
        pop     ebx
        pop     ebp 
-
        ret
 
 doneLbl:
@@ -135,11 +134,9 @@ doneLbl:
 		
 
 notPal:
-        
        pop     ebx
        pop     edx
        pop     esi
-       pop     ebx
        pop     ebp 
 
        mov eax, 0       ; return 0
