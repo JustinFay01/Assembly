@@ -140,10 +140,12 @@ newRec:
 
 
 skipI:
+    pop ebx         ; remove local var
     inc edi
     jmp newPush
 
 skipJ:
+    pop ebx         ; remove local var
     dec esi
 
 newPush:
@@ -153,10 +155,10 @@ newPush:
        jmp  newRec
 
 doneLbl:
-       pop     ebx
+       pop     ebx      ; remove local var
        pop     edx
        pop     esi
-       pop     ebx
+       pop     ebx     
        pop     ebp 
 
        mov eax, 1      ; return 1
@@ -176,4 +178,3 @@ notPal:
 isPal ENDP
 
 END                             ; end of source code
-
