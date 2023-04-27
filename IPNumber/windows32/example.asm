@@ -72,8 +72,23 @@ gotdots:
 		jl		nexts	
 
 ;****  Your NETWORK ID code here
+		mov     edx, 0   ; octet #
+		mov     ecx, 0   
+		mov     ebx, 0  
+andLbl:
+		cmp		edx, 3
+		jg		doneLbl
 
-; convert the 4 octets to a dotted string
+		mov		eax, octets[edx*4]
+		mov		ecx, subnet[edx*4]	
+		and		ecx, eax
+		mov		octets[edx*4], ecx
+		inc		edx
+		jmp		andLbl
+
+
+
+doneLbl: ; convert the 4 octets to a dotted string
 		mov     edx, 0   ; octet #
 		mov     ecx, 0   
 		mov     ebx, 0   
