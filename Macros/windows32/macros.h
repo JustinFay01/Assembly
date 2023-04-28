@@ -2,11 +2,14 @@
 mystrlen MACRO string
 		mov eax, 0
 		lea ecx, string
-LEN:	cmp string[eax], 0
+
+LEN : cmp string[eax], 0
+
 		je mLENGTHEND
 		inc eax
 		jmp LEN
-mLENGTHEND:
+
+mLENGTHEND :
 ENDM
 
 lettercheck MACRO reg, notLbl, jumpLbl
