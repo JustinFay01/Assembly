@@ -30,18 +30,9 @@ LENGTHEND:
         mov     ecx, eax
         dec     ecx
 
-CHECK:  
-		mov     al, string[ebx]
-		cmp		al, 48
-		jb		isNotALetter1
-		cmp		al, 57
-		ja		checkUpperCase1
-			
-		mov     al, string[ecx]
-		cmp		al, 48
-		jb		isNotALetter2
-		cmp		al, 57
-		ja		checkUpperCase2
+CHECK: lettercheck ebx,isNotALetter1,checkUpperCase1
+	   lettercheck ecx,isNotALetter2,checkUpperCase2 
+		
 		
 COMPARE:
         cmp     al, string[ecx]
